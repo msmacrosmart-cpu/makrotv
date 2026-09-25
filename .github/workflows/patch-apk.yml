@@ -33,24 +33,29 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Set up Android build tools
-        uses: android-actions/setup-android@v3
-
-      - name: Install apktool and build tools
+      - name: Install apktool and Android build tools
         shell: bash
         run: |
           set -euo pipefail
           sudo apt-get update -qq
+          # Debian/Ubuntu packages provide the same tools used by the successful
+          # rebuild workflow; do not fall back to jarsigner because v2/v3 are required.
           sudo apt-get install -y -qq apktool unzip zip 2>&1 | tail -n 30 || true
-          sdkmanager "build-tools;35.0.0"
-          export PATH="$ANDROID_HOME/build-tools/35.0.0:$PATH"
-          echo "$ANDROID_HOME/build-tools/35.0.0" >> "$GITHUB_PATH"
+          sudo apt-get install -y -qq zipalign apksigner 2>&1 | tail -n 30 || true
           if ! command -v apktool >/dev/null 2>&1; then
             curl -fsSL https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -o /tmp/apktool
             curl -fsSL https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar -o /tmp/apktool.jar
             sudo install -m 0755 /tmp/apktool /usr/local/bin/apktool
             sudo install -m 0644 /tmp/apktool.jar /usr/local/bin/apktool.jar
           fi
+          for sdk in "${ANDROID_HOME:-}" "${ANDROID_SDK_ROOT:-}" /usr/local/lib/android/sdk /opt/android-sdk; do
+            if [ -d "$sdk" ]; then
+              for build_tools in "$sdk"/build-tools/*; do
+                [ -d "$build_tools" ] && export PATH="$build_tools:$PATH"
+              done
+            fi
+          done
+          echo "$PATH" >> "$GITHUB_PATH"
           command -v apktool
           command -v zipalign
           command -v apksigner
