@@ -32,9 +32,9 @@ export async function GET(req: NextRequest) {
       {
         error: "APK patchado não encontrado",
         message: "O APK patchado ainda não foi gerado neste deploy.",
-        howToGenerate: "Execute: ./scripts/patch-apk.sh https://makrotv.vercel.app  ou dispare o workflow GitHub Actions 'Patch APK'",
+        howToGenerate: "Execute: ./scripts/patch-apk.sh https://makrotv-ten.vercel.app  ou dispare o workflow GitHub Actions 'Patch APK'",
         info: "/api/apk/info",
-        panelUrl: process.env.NEXT_PUBLIC_PANEL_URL || "https://makrotv.vercel.app",
+        panelUrl: process.env.NEXT_PUBLIC_PANEL_URL || "https://makrotv-ten.vercel.app",
         workflow: "https://github.com/msmacrosmart-cpu/makrotv/actions/workflows/patch-apk.yml",
       },
       { status: 404 }

@@ -18,7 +18,7 @@ APK esperado após o workflow:
 O workflow deve registrar o tamanho final e validar:
 
   apksigner verify --verbose
-  unzip -p public/makrotv-patched.apk classes.dex | strings | grep makrotv.vercel.app
+  unzip -p public/makrotv-patched.apk classes.dex | strings | grep makrotv-ten.vercel.app
 
 Branch desta sessão: arena/01a0d775-makrotv
-Domínio canônico: https://makrotv.vercel.app
+Domínio canônico: https://makrotv-ten.vercel.app

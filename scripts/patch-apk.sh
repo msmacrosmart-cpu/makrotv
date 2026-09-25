@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Rebuilds the MakroTV APK with the panel URL embedded in smali.
 # The order is important: apktool d -> patch -> apktool b -> zipalign -> apksigner.
-# Usage: ./scripts/patch-apk.sh https://makrotv.vercel.app
+# Usage: ./scripts/patch-apk.sh https://makrotv-ten.vercel.app
 
 set -Eeuo pipefail
 
-PANEL_URL=${1:-"https://makrotv.vercel.app"}
+PANEL_URL=${1:-"https://makrotv-ten.vercel.app"}
 APK_IN=${APK_IN:-"makrotv.apk"}
 OUT_DIR=${OUT_DIR:-"apk-patched"}
 WORK_DIR=${WORK_DIR:-"$(mktemp -d /tmp/makrotv-patch.XXXXXX)"}

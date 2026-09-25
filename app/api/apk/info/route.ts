@@ -28,7 +28,7 @@ export async function GET() {
     originalStat = fs.statSync(path.join(process.cwd(), "makrotv.apk"));
   } catch {}
 
-  const panelUrl = process.env.NEXT_PUBLIC_PANEL_URL || "https://makrotv.vercel.app";
+  const panelUrl = process.env.NEXT_PUBLIC_PANEL_URL || "https://makrotv-ten.vercel.app";
   const basePatched = `${panelUrl}/makrotv/api/`;
   const baseOriginal = "http://appstop.site/makrotv/api/";
 
@@ -59,10 +59,10 @@ export async function GET() {
     originalBaseUrl: baseOriginal,
     originalSize: originalStat?.size || null,
     originalSizeHuman: originalStat ? `${(originalStat.size / 1024 / 1024).toFixed(2)} MB` : null,
-    message: "APK patchado ainda não gerado neste deploy. Execute o workflow 'Patch APK' no GitHub ou rode ./scripts/patch-apk.sh https://makrotv.vercel.app localmente.",
+    message: "APK patchado ainda não gerado neste deploy. Execute o workflow 'Patch APK' no GitHub ou rode ./scripts/patch-apk.sh https://makrotv-ten.vercel.app localmente.",
     generate: {
       githubWorkflow: "https://github.com/msmacrosmart-cpu/makrotv/actions/workflows/patch-apk.yml",
-      script: "./scripts/patch-apk.sh https://makrotv.vercel.app",
+      script: "./scripts/patch-apk.sh https://makrotv-ten.vercel.app",
       expectedOutput: "apk-patched/makrotv-patched.apk e public/makrotv-patched.apk",
     },
     downloadFallback: {
