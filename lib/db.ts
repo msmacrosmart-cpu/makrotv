@@ -74,16 +74,7 @@ function ensureDefaultDB(): DB {
   const now = new Date().toISOString();
   const defaultAdminPass = bcrypt.hashSync(process.env.ADMIN_PASSWORD || "admin123", 10);
   return {
-    servers: [
-      {
-        id: "srv_default",
-        name: "Servidor Principal",
-        url: process.env.DEFAULT_DNS || "http://seu-servidor-xtream.com:8080",
-        status: "active",
-        createdAt: now,
-        updatedAt: now,
-      },
-    ],
+    servers: [],
     clients: [
       {
         id: "cli_demo",

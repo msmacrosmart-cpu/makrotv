@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { listServers, getServer, listClients, getClientByUsername } from "@/lib/db";
+import { listServers, getServer, getClientByUsername, getDB, saveDB } from "@/lib/db";
+import { verifyAdminToken } from "@/lib/auth";
 import crypto from "crypto";
 
 /**
@@ -21,6 +22,20 @@ export async function GET(req: NextRequest) {
   return handle(req);
 }
 export async function POST(req: NextRequest) {
+  const contentType = req.headers.get("content-type") || "";
+  if (contentType.includes("application/json")) {
+    const body = await req.clone().json().catch(() => null);
+    if (body && Array.isArray(body.servers)) {
+      const token = req.cookies.get("admin_token")?.value;
+      if (!token || !verifyAdminToken(token)) {
+        return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+      }
+      const db = getDB();
+      db.servers = body.servers;
+      saveDB(db);
+      return NextResponse.json({ servers: db.servers });
+    }
+  }
   return handle(req);
 }
 
@@ -81,7 +96,7 @@ async function handle(req: NextRequest) {
       // For backward compat, if client has linked server but username not supplied, we could still return all.
     } else {
       // fallback to env
-      targetServers = [process.env.DEFAULT_DNS || "http://seu-servidor-xtream.com:8080"];
+      targetServers = [];
     }
   }
 
