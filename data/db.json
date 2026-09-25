@@ -1,0 +1,66 @@
+{
+  "servers": [
+    {
+      "id": "srv_default",
+      "name": "Servidor Principal",
+      "url": "http://seu-servidor-xtream.com:8080",
+      "status": "active",
+      "createdAt": "2026-09-25T06:30:00.000Z",
+      "updatedAt": "2026-09-25T06:30:00.000Z"
+    },
+    {
+      "id": "srv_vip",
+      "name": "Servidor VIP",
+      "url": "http://vip-servidor.com:8080",
+      "status": "active",
+      "createdAt": "2026-09-25T06:32:12.637Z",
+      "updatedAt": "2026-09-25T06:32:12.637Z"
+    }
+  ],
+  "clients": [
+    {
+      "id": "cli_demo",
+      "name": "Cliente Demonstração",
+      "username": "demo",
+      "password": "$2a$10$fx4k3XoQUnkbwc4JPkBNO.b9juzGlcXOfcR4hv5KuMxKzOhoCF7wC",
+      "email": "demo@makrotv.com",
+      "serverId": "srv_default",
+      "status": "active",
+      "expiry": "2026-10-25T00:00:00.000Z",
+      "createdAt": "2026-09-25T06:30:00.000Z",
+      "updatedAt": "2026-09-25T06:30:00.000Z"
+    },
+    {
+      "id": "cli_vipuser",
+      "name": "Cliente VIP",
+      "username": "vipuser",
+      "password": "$2a$10$LbqpslhtMMXmrmKvQ3RyBuib8R4NKLdf6UHwEnYvl7iigYUcIfAhi",
+      "email": "vip@test.com",
+      "serverId": null,
+      "status": "active",
+      "expiry": "2026-12-31T00:00:00.000Z",
+      "createdAt": "2026-09-25T06:32:12.682Z",
+      "updatedAt": "2026-09-25T06:32:12.682Z"
+    },
+    {
+      "id": "cli_joao",
+      "name": "João VIP",
+      "username": "joao_vip",
+      "password": "$2a$10$uvaKJx2G3CM9ngf8.PJ9lO2HUfbCcddraB8F4syNRViLrTUrCVEfK",
+      "email": "joao@vip.com",
+      "serverId": "srv_vip",
+      "status": "active",
+      "expiry": "2026-12-31T00:00:00.000Z",
+      "createdAt": "2026-09-25T06:32:12.846Z",
+      "updatedAt": "2026-09-25T06:32:12.846Z"
+    }
+  ],
+  "admins": [
+    {
+      "id": "adm_default",
+      "username": "admin",
+      "password": "$2a$10$kg7Odv.6KTEv6mLYVPXdwO6OUrCKlHWRVZaLVvvsnlgxVip8/LSBm"
+    }
+  ],
+  "meta": { "version": 1 }
+}

@@ -1,0 +1,160 @@
+package f.j.a.j;
+
+/* loaded from: classes.dex */
+public class c {
+    public f.j.a.k.f.f a;
+    public android.content.Context b;
+    public android.content.SharedPreferences.Editor c;
+
+    /* renamed from: d, reason: collision with root package name */
+    public android.content.SharedPreferences f10236d;
+
+    /* loaded from: classes.dex */
+    public class a implements q.d<boxbr.apksrebrand.smarters.model.callback.LoginCallback> {
+        public final /* synthetic */ java.lang.String a;
+        public final /* synthetic */ java.lang.String b;
+
+        public a(java.lang.String str, java.lang.String str2) {
+            this.a = str;
+            this.b = str2;
+        }
+
+        @Override // q.d
+        public void a(q.b<boxbr.apksrebrand.smarters.model.callback.LoginCallback> bVar, java.lang.Throwable th) {
+            f.j.a.j.c.this.a.c0(f.j.a.j.c.this.b.getResources().getString(brstore.makro.app.R.string.network_error_connection));
+        }
+
+        @Override // q.d
+        public void b(q.b<boxbr.apksrebrand.smarters.model.callback.LoginCallback> bVar, q.l<boxbr.apksrebrand.smarters.model.callback.LoginCallback> lVar) {
+            java.lang.String str;
+            f.j.a.k.f.f fVar;
+            if (lVar.d()) {
+                f.j.a.j.c.this.a.U(lVar.a(), "validateLogin");
+                return;
+            }
+            if (lVar.b() == 404) {
+                fVar = f.j.a.j.c.this.a;
+                str = f.j.a.j.c.this.b.getResources().getString(brstore.makro.app.R.string.invalid_server_url);
+            } else if (lVar.b() == 301 || lVar.b() == 302) {
+                java.lang.String z = lVar.e().z(org.jsoup.helper.HttpConnection.Response.LOCATION);
+                str = "ERROR Code 301 || 302: Network error occured! Please try again";
+                if (z != null) {
+                    java.lang.String[] split = z.split("/player_api.php");
+                    f.j.a.j.c cVar = f.j.a.j.c.this;
+                    cVar.f10236d = cVar.b.getSharedPreferences("loginPrefsserverurl", 0);
+                    f.j.a.j.c cVar2 = f.j.a.j.c.this;
+                    cVar2.c = cVar2.f10236d.edit();
+                    f.j.a.j.c.this.c.putString(f.j.a.h.i.a.f10105o, split[0]);
+                    f.j.a.j.c.this.c.apply();
+                    try {
+                        f.j.a.j.c.this.g(this.a, this.b);
+                        return;
+                    } catch (java.io.IOException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+                fVar = f.j.a.j.c.this.a;
+            } else {
+                if (lVar.a() != null) {
+                    return;
+                }
+                fVar = f.j.a.j.c.this.a;
+                str = "No Response from server";
+            }
+            fVar.c0(str);
+        }
+    }
+
+    /* loaded from: classes.dex */
+    public class b implements q.d<boxbr.apksrebrand.smarters.model.callback.LoginCallback> {
+        public final /* synthetic */ java.util.ArrayList a;
+        public final /* synthetic */ java.lang.String b;
+        public final /* synthetic */ java.lang.String c;
+
+        public b(java.util.ArrayList arrayList, java.lang.String str, java.lang.String str2) {
+            this.a = arrayList;
+            this.b = str;
+            this.c = str2;
+        }
+
+        @Override // q.d
+        public void a(@org.jetbrains.annotations.NotNull q.b<boxbr.apksrebrand.smarters.model.callback.LoginCallback> bVar, @org.jetbrains.annotations.NotNull java.lang.Throwable th) {
+            f.j.a.j.c.this.a.P(this.a, f.j.a.j.c.this.b.getResources().getString(brstore.makro.app.R.string.network_error_connection));
+        }
+
+        @Override // q.d
+        public void b(@org.jetbrains.annotations.NotNull q.b<boxbr.apksrebrand.smarters.model.callback.LoginCallback> bVar, @org.jetbrains.annotations.NotNull q.l<boxbr.apksrebrand.smarters.model.callback.LoginCallback> lVar) {
+            f.j.a.k.f.f fVar;
+            java.util.ArrayList<java.lang.String> arrayList;
+            java.lang.String str;
+            if (lVar.d()) {
+                f.j.a.j.c.this.a.H(lVar.a(), "validateLogin", this.a);
+                return;
+            }
+            if (lVar.b() == 404) {
+                fVar = f.j.a.j.c.this.a;
+                arrayList = this.a;
+                str = f.j.a.j.c.this.b.getResources().getString(brstore.makro.app.R.string.invalid_server_url);
+            } else {
+                if (lVar.b() == 301 || lVar.b() == 302) {
+                    java.lang.String z = lVar.e().z(org.jsoup.helper.HttpConnection.Response.LOCATION);
+                    if (z != null) {
+                        java.lang.String[] split = z.split("/player_api.php");
+                        f.j.a.j.c cVar = f.j.a.j.c.this;
+                        cVar.f10236d = cVar.b.getSharedPreferences("loginPrefsserverurl", 0);
+                        f.j.a.j.c cVar2 = f.j.a.j.c.this;
+                        cVar2.c = cVar2.f10236d.edit();
+                        f.j.a.j.c.this.c.putString(f.j.a.h.i.a.f10105o, split[0]);
+                        f.j.a.j.c.this.c.apply();
+                        try {
+                            f.j.a.j.c.this.h(this.b, this.c, this.a);
+                            return;
+                        } catch (java.io.IOException e2) {
+                            e2.printStackTrace();
+                        }
+                    }
+                    f.j.a.j.c.this.a.P(this.a, "ERROR Code 301 || 302: Network error occured! Please try again");
+                    return;
+                }
+                if (lVar.a() != null) {
+                    return;
+                }
+                fVar = f.j.a.j.c.this.a;
+                arrayList = this.a;
+                str = "No Response from server";
+            }
+            fVar.P(arrayList, str);
+        }
+    }
+
+    public c(f.j.a.k.f.f fVar, android.content.Context context) {
+        this.a = fVar;
+        this.b = context;
+    }
+
+    public void g(java.lang.String str, java.lang.String str2) {
+        android.content.Context context;
+        q.m Y = f.j.a.h.i.e.Y(this.b);
+        if (Y != null) {
+            ((f.j.a.i.q.a) Y.d(f.j.a.i.q.a.class)).l(org.jsoup.helper.HttpConnection.FORM_URL_ENCODED, str, str2).B(new f.j.a.j.c.a(str, str2));
+        } else {
+            if (Y != null || (context = this.b) == null) {
+                return;
+            }
+            this.a.M(context.getResources().getString(brstore.makro.app.R.string.url_not_working));
+        }
+    }
+
+    public void h(java.lang.String str, java.lang.String str2, java.util.ArrayList<java.lang.String> arrayList) {
+        android.content.Context context;
+        q.m Y = f.j.a.h.i.e.Y(this.b);
+        if (Y != null) {
+            ((f.j.a.i.q.a) Y.d(f.j.a.i.q.a.class)).l(org.jsoup.helper.HttpConnection.FORM_URL_ENCODED, str, str2).B(new f.j.a.j.c.b(arrayList, str, str2));
+        } else {
+            if (Y != null || (context = this.b) == null) {
+                return;
+            }
+            this.a.x(arrayList, context.getResources().getString(brstore.makro.app.R.string.url_not_working));
+        }
+    }
+}

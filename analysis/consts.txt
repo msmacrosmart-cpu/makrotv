@@ -1,0 +1,49 @@
+/tmp/jadx/sources/f/j/a/h/i/e.java:1704:                java.lang.String lowerCase = context.getSharedPreferences("loginPrefsserverurl", 0).getString(f.j.a.h.i.a.f10105o, "").toLowerCase();
+/tmp/jadx/sources/f/j/a/h/i/a.java:63:    public static java.lang.Boolean f10100j = null;
+/tmp/jadx/sources/f/j/a/h/i/a.java:79:    public static java.lang.String f10105o = "serverUrlMAG";
+/tmp/jadx/sources/f/j/a/h/i/a.java:105:        f10100j = bool;
+/tmp/jadx/sources/f/j/a/j/c.java:47:                    f.j.a.j.c.this.c.putString(f.j.a.h.i.a.f10105o, split[0]);
+/tmp/jadx/sources/f/j/a/j/c.java:107:                        f.j.a.j.c.this.c.putString(f.j.a.h.i.a.f10105o, split[0]);
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:185:            f.j.a.h.i.a.f10100j = f.j.a.h.i.a.f10100j.booleanValue() ? java.lang.Boolean.FALSE : java.lang.Boolean.TRUE;
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:342:            if (!f.j.a.h.i.a.f10100j.booleanValue()) {
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:586:            this.I.putString(f.j.a.h.i.a.f10105o, arrayList.get(0).trim());
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:643:                    this.y.getSharedPreferences("loginPrefsserverurl", 0).getString(f.j.a.h.i.a.f10105o, "").toLowerCase();
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:654:                    edit.putString(f.j.a.h.i.a.f10105o, f2 + ":" + b2);
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:716:                        edit3.putString(f.j.a.h.i.a.f10105o, f2);
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:816:                if (f.j.a.h.i.a.f10100j.booleanValue()) {
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:828:            if (!f.j.a.h.i.a.f10100j.booleanValue() && this.s.getText().toString().trim().length() == 0) {
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:896:            if (f.j.a.h.i.a.f10100j.booleanValue()) {
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:970:                } else if (f.j.a.h.i.a.f10100j.booleanValue()) {
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:1064:                    if (f.j.a.h.i.a.f10100j.booleanValue()) {
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:1075:                    this.I.putString(f.j.a.h.i.a.f10105o, f.j.a.f.f.a(this));
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:1077:                    this.E.putString(f.j.a.h.i.a.f10105o, f.j.a.f.f.a(this));
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:1209:            this.I.putString(f.j.a.h.i.a.f10105o, this.c0.get(0).trim());
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:1225:        if (f.j.a.h.i.a.f10100j.booleanValue() || !c1()) {
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:1226:            if (f.j.a.h.i.a.f10100j.booleanValue() && c1()) {
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:1237:            this.I.putString(f.j.a.h.i.a.f10105o, "http://qqtv.nl");
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:1239:            this.E.putString(f.j.a.h.i.a.f10105o, "http://qqtv.nl");
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:1265:            this.I.putString(f.j.a.h.i.a.f10105o, lowerCase);
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:1267:            this.E.putString(f.j.a.h.i.a.f10105o, this.B);
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java:1401:            this.I.putString(f.j.a.h.i.a.f10105o, arrayList.get(0).trim());
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java:572:                this.K.putString(f.j.a.h.i.a.f10105o, arrayList.get(0).trim());
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java:597:                this.K.putString(f.j.a.h.i.a.f10105o, arrayList.get(0).trim());
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java:620:            this.t.getSharedPreferences("loginPrefsserverurl", 0).getString(f.j.a.h.i.a.f10105o, "").toLowerCase();
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java:631:            edit.putString(f.j.a.h.i.a.f10105o, f2 + ":" + b2);
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java:708:            this.K.putString(f.j.a.h.i.a.f10105o, arrayList.get(0).trim());
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java:796:                    this.t.getSharedPreferences("loginPrefsserverurl", 0).getString(f.j.a.h.i.a.f10105o, "").toLowerCase();
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java:807:                    edit.putString(f.j.a.h.i.a.f10105o, f2 + ":" + b2);
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java:1167:                                this.K.putString(f.j.a.h.i.a.f10105o, f.j.a.f.f.a(this));
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java:1169:                                this.L.putString(f.j.a.h.i.a.f10105o, f.j.a.f.f.a(this));
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java:1230:            this.K.putString(f.j.a.h.i.a.f10105o, this.a0.get(0).trim());
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java:1441:            this.K.putString(f.j.a.h.i.a.f10105o, arrayList.get(0).trim());
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/adapter/MultiUserAdapter.java:235:            boxbr.apksrebrand.smarters.view.adapter.MultiUserAdapter.this.x.putString(f.j.a.h.i.a.f10105o, this.f1301d);
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/adapter/MultiUserAdapter.java:244:            multiUserAdapter2.u.putString(f.j.a.h.i.a.f10105o, this.f1301d);
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/adapter/MultiUserAdapter.java:336:                    java.lang.String string4 = sharedPreferences.getString(f.j.a.h.i.a.f10105o, "");
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/adapter/MultiUserAdapter.java:1156:                    java.lang.String string4 = sharedPreferences.getString(f.j.a.h.i.a.f10105o, "");
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/adapter/MultiUserAdapter.java:1160:                    edit2.putString(f.j.a.h.i.a.f10105o, f2);
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/adapter/MultiUserAdapter.java:1171:                    edit.putString(f.j.a.h.i.a.f10105o, f2);
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/adapter/MultiUserAdapter.java:1347:            edit2.putString(f.j.a.h.i.a.f10105o, this.r);
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/view/adapter/MultiUserAdapter.java:1353:            edit.putString(f.j.a.h.i.a.f10105o, this.r);
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/WHMCSClientapp/activities/FreeTrailActivity.java:143:                    if (f.j.a.h.i.a.f10100j.booleanValue()) {
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/WHMCSClientapp/activities/FreeTrailActivity.java:144:                        f.j.a.h.i.a.f10100j = java.lang.Boolean.FALSE;
+/tmp/jadx/sources/boxbr/apksrebrand/smarters/WHMCSClientapp/activities/FreeTrailActivity.java:295:            f.j.a.h.i.a.f10100j = java.lang.Boolean.TRUE;

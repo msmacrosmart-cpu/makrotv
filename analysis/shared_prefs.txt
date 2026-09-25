@@ -1,0 +1,100 @@
+/tmp/jadx/sources/f/f/a/d/i/a/e.java:5:    public final /* synthetic */ android.content.SharedPreferences a;
+/tmp/jadx/sources/f/f/a/d/i/a/e.java:9:    public e(android.content.SharedPreferences sharedPreferences, java.lang.String str, java.lang.Integer num) {
+/tmp/jadx/sources/f/f/a/d/i/a/i.java:5:    public final /* synthetic */ android.content.SharedPreferences a;
+/tmp/jadx/sources/f/f/a/d/i/a/i.java:9:    public i(android.content.SharedPreferences sharedPreferences, java.lang.String str, java.lang.String str2) {
+/tmp/jadx/sources/f/f/a/d/i/a/c.java:5:    public final /* synthetic */ android.content.SharedPreferences a;
+/tmp/jadx/sources/f/f/a/d/i/a/c.java:9:    public c(android.content.SharedPreferences sharedPreferences, java.lang.String str, java.lang.Boolean bool) {
+/tmp/jadx/sources/f/f/a/d/i/a/g.java:5:    public final /* synthetic */ android.content.SharedPreferences a;
+/tmp/jadx/sources/f/f/a/d/i/a/g.java:9:    public g(android.content.SharedPreferences sharedPreferences, java.lang.String str, java.lang.Long l2) {
+/tmp/jadx/sources/f/f/a/d/i/a/f.java:5:    public static java.lang.Long a(android.content.SharedPreferences sharedPreferences, java.lang.String str, java.lang.Long l2) {
+/tmp/jadx/sources/f/f/a/d/i/a/k.java:4:public final class k implements java.util.concurrent.Callable<android.content.SharedPreferences> {
+/tmp/jadx/sources/f/f/a/d/i/a/k.java:12:    public final /* synthetic */ android.content.SharedPreferences call() {
+/tmp/jadx/sources/f/f/a/d/i/a/k.java:13:        return this.a.getSharedPreferences("google_sdk_flags", 0);
+/tmp/jadx/sources/f/f/a/d/i/a/b.java:5:    public static java.lang.Boolean a(android.content.SharedPreferences sharedPreferences, java.lang.String str, java.lang.Boolean bool) {
+/tmp/jadx/sources/f/f/a/d/i/a/j.java:5:    public static android.content.SharedPreferences a;
+/tmp/jadx/sources/f/f/a/d/i/a/j.java:7:    public static android.content.SharedPreferences a(android.content.Context context) {
+/tmp/jadx/sources/f/f/a/d/i/a/j.java:8:        android.content.SharedPreferences sharedPreferences;
+/tmp/jadx/sources/f/f/a/d/i/a/j.java:9:        synchronized (android.content.SharedPreferences.class) {
+/tmp/jadx/sources/f/f/a/d/i/a/j.java:11:                a = (android.content.SharedPreferences) f.f.a.d.j.i.d.a(new f.f.a.d.i.a.k(context));
+/tmp/jadx/sources/f/f/a/d/i/a/h.java:5:    public static java.lang.String a(android.content.SharedPreferences sharedPreferences, java.lang.String str, java.lang.String str2) {
+/tmp/jadx/sources/f/f/a/d/i/a/d.java:5:    public static java.lang.Integer a(android.content.SharedPreferences sharedPreferences, java.lang.String str, java.lang.Integer num) {
+/tmp/jadx/sources/f/f/a/d/k/b/m4.java:35:            android.content.SharedPreferences.Editor edit = this.f8733e.p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/m4.java:44:        android.content.SharedPreferences.Editor edit2 = this.f8733e.p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/m4.java:80:        android.content.SharedPreferences.Editor edit = this.f8733e.p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/n4.java:27:        android.content.SharedPreferences.Editor edit = this.f8750d.p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/o4.java:8:    public android.content.SharedPreferences c;
+/tmp/jadx/sources/f/f/a/d/k/b/o4.java:93:        android.content.SharedPreferences sharedPreferences = this.a.b().getSharedPreferences("com.google.android.gms.measurement.prefs", 0);
+/tmp/jadx/sources/f/f/a/d/k/b/o4.java:98:            android.content.SharedPreferences.Editor edit = this.c.edit();
+/tmp/jadx/sources/f/f/a/d/k/b/o4.java:132:    public final android.content.SharedPreferences p() {
+/tmp/jadx/sources/f/f/a/d/k/b/o4.java:141:        android.content.SharedPreferences.Editor edit = p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/o4.java:170:        android.content.SharedPreferences.Editor edit = p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/o4.java:176:        android.content.SharedPreferences sharedPreferences = this.c;
+/tmp/jadx/sources/f/f/a/d/k/b/j4.java:31:        android.content.SharedPreferences.Editor edit = this.f8680e.p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/f7.java:74:                android.content.SharedPreferences.Editor edit = A.p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/f7.java:300:                android.content.SharedPreferences.Editor edit = A.p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/f7.java:780:                android.content.SharedPreferences.Editor edit = A.p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/c5.java:561:                        android.content.SharedPreferences.Editor edit = G2.a.a.getSharedPreferences("google.analytics.deferred.deeplink.prefs", 0).edit();
+/tmp/jadx/sources/f/f/a/d/k/b/c5.java:659:                    android.content.SharedPreferences.Editor edit = A4.p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/c5.java:674:                android.content.SharedPreferences.Editor edit2 = A5.p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/c5.java:680:                android.content.SharedPreferences.Editor edit3 = A6.p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/k4.java:59:                            this.f8686d.a.c().o().a("Error reading value from SharedPreferences. Value dropped");
+/tmp/jadx/sources/f/f/a/d/k/b/k4.java:64:                    this.f8686d.a.c().o().a("Error loading bundle from SharedPreferences. Values will be lost");
+/tmp/jadx/sources/f/f/a/d/k/b/k4.java:79:        android.content.SharedPreferences.Editor edit = this.f8686d.p().edit();
+/tmp/jadx/sources/f/f/a/d/k/b/k4.java:99:                            this.f8686d.a.c().o().b("Cannot serialize bundle value to SharedPreferences. Type", obj.getClass());
+/tmp/jadx/sources/f/f/a/d/k/b/k4.java:104:                        this.f8686d.a.c().o().b("Cannot serialize bundle value to SharedPreferences", e2);
+/tmp/jadx/sources/f/f/a/d/k/b/l4.java:31:        android.content.SharedPreferences.Editor edit = this.f8699e.p().edit();
+/tmp/jadx/sources/f/f/a/d/a/a/c.java:5:    public android.content.SharedPreferences a;
+/tmp/jadx/sources/f/f/a/d/a/a/c.java:10:            this.a = d2 == null ? null : d2.getSharedPreferences("google_ads_flags", 0);
+/tmp/jadx/sources/f/f/a/d/a/a/c.java:12:            android.util.Log.w("GmscoreFlag", "Error while getting SharedPreferences ", th);
+/tmp/jadx/sources/f/f/a/d/a/a/c.java:24:            android.util.Log.w("GmscoreFlag", "Error while reading from SharedPreferences ", th);
+/tmp/jadx/sources/f/f/a/d/a/a/c.java:33:            android.util.Log.w("GmscoreFlag", "Error while reading from SharedPreferences ", th);
+/tmp/jadx/sources/f/f/a/d/a/a/c.java:42:            android.util.Log.w("GmscoreFlag", "Error while reading from SharedPreferences ", th);
+/tmp/jadx/sources/f/f/a/d/d/u/b.java:31:    public android.content.SharedPreferences f7397j;
+/tmp/jadx/sources/f/f/a/d/d/u/b.java:200:                this.f7397j = this.a.getApplicationContext().getSharedPreferences(java.lang.String.format(java.util.Locale.ROOT, "%s.%s", this.a.getPackageName(), "client_cast_analytics_data"), 0);
+/tmp/jadx/sources/f/f/a/d/j/e/v3.java:12:    public final android.content.SharedPreferences f8202e;
+/tmp/jadx/sources/f/f/a/d/j/e/v3.java:32:    public v3(android.content.SharedPreferences sharedPreferences, f.f.a.d.j.e.x0 x0Var, android.os.Bundle bundle, java.lang.String str) {
+/tmp/jadx/sources/f/f/a/d/j/e/v3.java:46:    public final void c(android.content.SharedPreferences sharedPreferences, java.lang.String str) {
+/tmp/jadx/sources/f/f/a/d/j/e/n4.java:28:        android.content.SharedPreferences sharedPreferences;
+/tmp/jadx/sources/f/f/a/d/j/e/qa.java:15:    public final android.content.SharedPreferences b;
+/tmp/jadx/sources/f/f/a/d/j/e/qa.java:44:    public qa(android.content.SharedPreferences sharedPreferences, f.f.a.d.j.e.x0 x0Var, java.lang.String str) {
+/tmp/jadx/sources/f/f/a/d/j/e/qa.java:95:    public static synchronized f.f.a.d.j.e.qa b(android.content.SharedPreferences sharedPreferences, f.f.a.d.j.e.x0 x0Var, java.lang.String str) {
+/tmp/jadx/sources/f/f/a/d/j/e/qa.java:132:        android.content.SharedPreferences.Editor edit = this.b.edit();
+/tmp/jadx/sources/f/f/a/d/j/e/qa.java:166:            android.content.SharedPreferences.Editor edit = this.b.edit();
+/tmp/jadx/sources/f/f/a/d/j/e/x0.java:12:    public x0(android.content.SharedPreferences sharedPreferences, f.f.a.a.f<f.f.a.d.j.e.o6> fVar, long j2) {
+/tmp/jadx/sources/f/f/a/d/j/e/x0.java:23:    public static f.f.a.d.j.e.x0 a(android.content.SharedPreferences sharedPreferences, f.f.a.a.f<f.f.a.d.j.e.o6> fVar, long j2) {
+/tmp/jadx/sources/f/f/a/d/j/e/p8.java:21:    public static f.f.a.d.j.e.p8 a(android.content.SharedPreferences sharedPreferences) {
+/tmp/jadx/sources/f/f/a/d/j/e/p8.java:55:    public final void b(android.content.SharedPreferences sharedPreferences) {
+/tmp/jadx/sources/f/f/a/d/j/e/p8.java:59:        f8074f.a("Save the ApplicationAnalyticsSession to SharedPreferences %s", sharedPreferences);
+/tmp/jadx/sources/f/f/a/d/j/e/p8.java:60:        android.content.SharedPreferences.Editor edit = sharedPreferences.edit();
+/tmp/jadx/sources/f/f/a/d/j/j/e0.java:63:                android.util.Log.e("FA", "Exception reading flag from SharedPreferences.", e2);
+/tmp/jadx/sources/f/f/a/d/j/j/e0.java:80:            android.content.SharedPreferences sharedPreferences = context.getSharedPreferences("com.google.android.gms.measurement.prefs", 0);
+/tmp/jadx/sources/f/f/a/d/j/j/e0.java:82:            android.content.SharedPreferences.Editor edit = sharedPreferences.edit();
+/tmp/jadx/sources/f/f/a/d/j/j/s3.java:39:            throw new java.lang.IllegalArgumentException("Must pass a valid SharedPreferences file name or ContentProvider URI");
+/tmp/jadx/sources/f/f/a/d/j/j/t3.java:6:    public final android.content.SharedPreferences a;
+/tmp/jadx/sources/f/f/a/d/j/j/t3.java:7:    public final android.content.SharedPreferences.OnSharedPreferenceChangeListener b;
+/tmp/jadx/sources/f/f/a/d/j/j/t3.java:34:                android.content.SharedPreferences sharedPreferences = next.a;
+/tmp/jadx/sources/f/f/a/d/j/j/t3.java:35:                android.content.SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener = next.b;
+/tmp/jadx/sources/f/f/a/d/b/a/e/b/c.java:10:    public final android.content.SharedPreferences b;
+/tmp/jadx/sources/f/f/a/d/b/a/e/b/c.java:13:        this.b = context.getSharedPreferences("com.google.android.gms.signin", 0);
+/tmp/jadx/sources/f/f/c/t/a.java:6:    public final android.content.SharedPreferences b;
+/tmp/jadx/sources/f/f/c/t/a.java:12:        this.b = a.getSharedPreferences("com.google.firebase.common.prefs:" + str, 0);
+/tmp/jadx/sources/f/f/c/s/q/b.java:6:    public final android.content.SharedPreferences a;
+/tmp/jadx/sources/f/f/c/s/q/b.java:10:        this.a = cVar.g().getSharedPreferences("com.google.android.gms.appid", 0);
+/tmp/jadx/sources/f/f/c/p/g.java:7:    public final android.content.SharedPreferences a;
+/tmp/jadx/sources/f/f/c/p/g.java:10:        this.a = context.getSharedPreferences("FirebaseAppHeartBeat", 0);
+/tmp/jadx/sources/f/f/c/p/g.java:11:        context.getSharedPreferences("FirebaseAppHeartBeatStorage", 0);
+/tmp/jadx/sources/f/f/c/q/y.java:5:    public final android.content.SharedPreferences a;
+/tmp/jadx/sources/f/f/c/q/y.java:75:        this.a = context.getSharedPreferences("com.google.android.gms.appid", 0);
+/tmp/jadx/sources/f/f/c/q/y.java:147:        android.content.SharedPreferences.Editor edit = this.a.edit();
+/tmp/jadx/sources/f/f/c/q/y.java:164:        android.content.SharedPreferences.Editor edit = this.a.edit();
+/tmp/jadx/sources/f/f/c/u/y.java:5:    public final android.content.SharedPreferences a;
+/tmp/jadx/sources/f/f/c/u/y.java:18:    public y(android.content.SharedPreferences sharedPreferences, java.lang.String str, java.lang.String str2, java.util.concurrent.Executor executor) {
+/tmp/jadx/sources/f/f/c/u/y.java:23:    public static f.f.c.u.y c(android.content.SharedPreferences sharedPreferences, java.lang.String str, java.lang.String str2, java.util.concurrent.Executor executor) {
+/tmp/jadx/sources/f/f/c/u/s.java:33:            android.content.SharedPreferences sharedPreferences = g2.getSharedPreferences("com.google.firebase.messaging", 0);
+/tmp/jadx/sources/f/f/c/u/a0.java:8:    public final android.content.SharedPreferences a;
+/tmp/jadx/sources/f/f/c/u/a0.java:12:    public a0(android.content.SharedPreferences sharedPreferences, java.util.concurrent.Executor executor) {
+/tmp/jadx/sources/f/f/c/u/a0.java:23:            f.f.c.u.a0 a0Var2 = new f.f.c.u.a0(context.getSharedPreferences("com.google.android.gms.appid", 0), executor);
+/tmp/jadx/sources/f/d/b0.java:22:    public static android.content.SharedPreferences f4932h;
+/tmp/jadx/sources/f/d/b0.java:112:            f4932h = f.d.j.e().getSharedPreferences("com.facebook.sdk.USER_SETTINGS", 0);
+/tmp/jadx/sources/f/d/s.java:7:    public android.content.SharedPreferences b;
+/tmp/jadx/sources/f/d/s.java:15:        this.a = com.facebook.internal.w.O(str) ? "com.facebook.SharedPreferencesTokenCachingStrategy.DEFAULT_KEY" : str;

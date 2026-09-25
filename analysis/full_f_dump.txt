@@ -1,0 +1,448 @@
+=== analysis/full_f/f/a.java ===
+package f.j.a.f;
+
+@android.annotation.SuppressLint({"SimpleDateFormat"})
+/* loaded from: classes.dex */
+public class a {
+    public static f.j.a.f.c<java.lang.String> a;
+    public static java.lang.String b = f.j.a.f.g.a.a;
+
+    public static java.lang.String a(android.content.Context context, java.lang.String str, int i2, java.lang.String str2, java.util.List<f.j.a.f.e> list) {
+        try {
+            m.x xVar = new m.x();
+            m.x.b s = xVar.s();
+            s.c(30L, java.util.concurrent.TimeUnit.SECONDS);
+            s.e(30L, java.util.concurrent.TimeUnit.SECONDS);
+            s.f(true);
+            s.a();
+            m.a0 a0Var = null;
+            if (str2.equals("")) {
+                m.a0.a aVar = new m.a0.a();
+                aVar.j(b + str);
+                aVar.e("User-Agent", "IPTV Smarters Pro");
+                a0Var = aVar.b();
+            }
+            if (str2.equalsIgnoreCase("GET")) {
+                m.a0.a aVar2 = new m.a0.a();
+                aVar2.j(b + str);
+                aVar2.e("User-Agent", "IPTV Smarters Pro");
+                if (list != null) {
+                    for (int i3 = 0; i3 < list.size(); i3++) {
+                        aVar2.a(list.get(i3).b(), list.get(i3).c());
+                    }
+                }
+                aVar2.a(org.jsoup.helper.HttpConnection.CONTENT_TYPE, "application/json; charset=utf-8");
+                a0Var = aVar2.b();
+            }
+            if (str2.equalsIgnoreCase("Form")) {
+                m.q.a aVar3 = new m.q.a();
+                for (int i4 = 0; i4 < list.size(); i4++) {
+                    aVar3.a(list.get(i4).b(), list.get(i4).c());
+                }
+                m.q c = aVar3.c();
+                m.a0.a aVar4 = new m.a0.a();
+                aVar4.j(b + str);
+                aVar4.e("User-Agent", "IPTV Smarters Pro");
+                aVar4.a(org.jsoup.helper.HttpConnection.CONTENT_TYPE, "application/json; charset=utf-8");
+                aVar4.h(c);
+                a0Var = aVar4.b();
+            }
+            if (str2.equalsIgnoreCase("FormAPI")) {
+                m.q.a aVar5 = new m.q.a();
+                for (int i5 = 0; i5 < list.size(); i5++) {
+                    aVar5.a(list.get(i5).b(), list.get(i5).c());
+                }
+                m.q c2 = aVar5.c();
+                m.a0.a aVar6 = new m.a0.a();
+                aVar6.j(b + str);
+                aVar6.e("User-Agent", "IPTV Smarters Pro");
+                aVar6.a(org.jsoup.helper.HttpConnection.CONTENT_TYPE, "application/json; charset=utf-8");
+                aVar6.h(c2);
+                a0Var = aVar6.b();
+            }
+            if (str2.equalsIgnoreCase("DEL")) {
+                m.a0.a aVar7 = new m.a0.a();
+                aVar7.j(b + str);
+                aVar7.e("User-Agent", "IPTV Smarters Pro");
+                if (list != null) {
+                    for (int i6 = 0; i6 < list.size(); i6++) {
+                        aVar7.a(list.get(i6).b(), list.get(i6).c());
+                    }
+                }
+                aVar7.a(org.jsoup.helper.HttpConnection.CONTENT_TYPE, "application/json; charset=utf-8");
+                aVar7.c();
+                a0Var = aVar7.b();
+            }
+            if (str2.equalsIgnoreCase("Multipart")) {
+                m.v c3 = m.v.c("image/png");
+                m.v c4 = m.v.c("video/*");
+                m.w.a aVar8 = new m.w.a();
+                for (int i7 = 0; i7 < list.size(); i7++) {
+                    if (list.get(i7).a() != null) {
+                        if (list.get(i7).a().getAbsolutePath().endsWith(".png") || list.get(i7).a().getAbsolutePath().endsWith(".jpg") || list.get(i7).a().getAbsolutePath().endsWith(".jpeg")) {
+                            aVar8.f(m.w.f11016f);
+                            aVar8.b(list.get(i7).b(), list.get(i7).a().getName(), m.b0.c(c3, list.get(i7).a()));
+                        }
+                        if (list.get(i7).a().getAbsolutePath().endsWith(".mp4") || list.get(i7).a().getAbsolutePath().endsWith(".mpeg") || list.get(i7).a().getAbsolutePath().endsWith(".3gp") || list.get(i7).a().getAbsolutePath().endsWith(".avi")) {
+                            aVar8.f(m.w.f11016f);
+                            aVar8.b(list.get(i7).b(), list.get(i7).a().getName(), m.b0.c(c4, list.get(i7).a()));
+                        }
+                    } else {
+                        aVar8.f(m.w.f11016f);
+                        aVar8.a(list.get(i7).b(), list.get(i7).c());
+                    }
+                }
+                m.w e2 = aVar8.e();
+                m.a0.a aVar9 = new m.a0.a();
+                aVar9.j(b + str);
+                aVar9.e("User-Agent", "IPTV Smarters Pro");
+                aVar9.h(e2);
+                a0Var = aVar9.b();
+            }
+            return xVar.a(a0Var).execute().a().D();
+        } catch (java.net.SocketTimeoutException e3) {
+            e3.printStackTrace();
+            a.p(i2);
+            return "";
+        } catch (java.io.IOException e4) {
+            e4.printStackTrace();
+            a.p(i2);
+            return "";
+        } catch (java.lang.Exception e5) {
+            e5.printStackTrace();
+            a.p(i2);
+            return "";
+        }
+    }
+}
+=== analysis/full_f/f/b.java ===
+package f.j.a.f;
+
+/* loaded from: classes.dex */
+public class b {
+    public static org.json.JSONObject a = null;
+    public static java.lang.String b = "";
+
+    static {
+        new java.util.ArrayList();
+    }
+}
+=== analysis/full_f/f/c.java ===
+package f.j.a.f;
+
+/* loaded from: classes.dex */
+public interface c<T> {
+    void h0(T t, int i2, boolean z);
+
+    void p(int i2);
+}
+=== analysis/full_f/f/d.java ===
+package f.j.a.f;
+
+/* loaded from: classes.dex */
+public class d extends android.os.AsyncTask<java.lang.String, java.lang.Void, java.lang.String> {
+    public f.j.a.f.c<java.lang.String> a;
+    public int b;
+    public boolean c = false;
+
+    /* renamed from: d, reason: collision with root package name */
+    public android.content.Context f9941d;
+
+    /* renamed from: e, reason: collision with root package name */
+    public java.lang.String f9942e;
+
+    /* renamed from: f, reason: collision with root package name */
+    public java.lang.String f9943f;
+
+    /* renamed from: g, reason: collision with root package name */
+    public java.util.List<f.j.a.f.e> f9944g;
+
+    /* renamed from: h, reason: collision with root package name */
+    public java.lang.Boolean f9945h;
+
+    /* renamed from: i, reason: collision with root package name */
+    public android.app.Dialog f9946i;
+
+    /* loaded from: classes.dex */
+    public class a implements java.lang.Runnable {
+        public a() {
+        }
+
+        @Override // java.lang.Runnable
+        public void run() {
+            f.j.a.f.d dVar = f.j.a.f.d.this;
+            dVar.d(dVar.f9941d, "Loading data...");
+        }
+    }
+
+    /* loaded from: classes.dex */
+    public class b implements java.lang.Runnable {
+        public b(f.j.a.f.d dVar) {
+        }
+
+        @Override // java.lang.Runnable
+        public void run() {
+        }
+    }
+
+    /* loaded from: classes.dex */
+    public class c implements java.lang.Runnable {
+        public c(f.j.a.f.d dVar) {
+        }
+
+        @Override // java.lang.Runnable
+        public void run() {
+        }
+    }
+
+    public d(android.content.Context context, java.lang.String str, int i2, f.j.a.f.c<java.lang.String> cVar, java.lang.String str2, java.util.List<f.j.a.f.e> list, java.lang.Boolean bool) {
+        this.f9941d = context;
+        this.f9942e = str;
+        this.b = i2;
+        this.a = cVar;
+        this.f9943f = str2;
+        this.f9944g = list;
+        this.f9945h = bool;
+    }
+
+    public void a() {
+        try {
+            if (this.f9946i == null || !this.f9946i.isShowing()) {
+                return;
+            }
+            this.f9946i.cancel();
+        } catch (java.lang.Exception unused) {
+        }
+    }
+
+    @Override // android.os.AsyncTask
+    /* renamed from: b, reason: merged with bridge method [inline-methods] */
+    public java.lang.String doInBackground(java.lang.String... strArr) {
+        java.lang.String str = null;
+        try {
+            str = f.j.a.f.a.a(this.f9941d, this.f9942e, this.b, this.f9943f, this.f9944g);
+            if (str != null) {
+                this.c = true;
+            } else {
+                new android.os.Handler(android.os.Looper.getMainLooper()).post(new f.j.a.f.d.b(this));
+            }
+        } catch (java.lang.Exception e2) {
+            e2.printStackTrace();
+        }
+        return str;
+    }
+
+    @Override // android.os.AsyncTask
+    @android.annotation.TargetApi(11)
+    /* renamed from: c, reason: merged with bridge method [inline-methods] */
+    public void onPostExecute(java.lang.String str) {
+        try {
+            if (this.c) {
+                if (str == null) {
+                    new android.os.Handler(android.os.Looper.getMainLooper()).post(new f.j.a.f.d.c(this));
+                }
+                this.a.h0(str, this.b, this.c);
+            } else {
+                this.a.p(this.b);
+            }
+        } catch (java.lang.Exception unused) {
+        }
+        if (this.f9945h.booleanValue()) {
+            try {
+                a();
+            } catch (java.lang.Exception unused2) {
+            }
+        }
+    }
+
+    public void d(android.content.Context context, java.lang.String str) {
+        android.app.Dialog dialog = new android.app.Dialog(context, android.R.style.Theme.Translucent.NoTitleBar);
+        this.f9946i = dialog;
+        dialog.setContentView(brstore.makro.app.R.layout.layout_progress_bar);
+        this.f9946i.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(0));
+        this.f9946i.setCancelable(false);
+        ((android.widget.TextView) this.f9946i.findViewById(brstore.makro.app.R.id.message)).setText(str);
+        try {
+            if (((android.app.Activity) this.f9941d).isFinishing()) {
+                android.util.Log.e("FINISHED", "FINISHED");
+            } else {
+                this.f9946i.show();
+            }
+        } catch (java.lang.Exception unused) {
+        }
+    }
+
+    @Override // android.os.AsyncTask
+    public void onCancelled() {
+        super.onCancelled();
+    }
+
+    @Override // android.os.AsyncTask
+    public void onPreExecute() {
+        if (this.f9945h.booleanValue()) {
+            try {
+                if (this.f9946i != null && this.f9946i.isShowing()) {
+                    a();
+                }
+                new android.os.Handler(android.os.Looper.getMainLooper()).post(new f.j.a.f.d.a());
+            } catch (java.lang.Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+}
+=== analysis/full_f/f/e.java ===
+package f.j.a.f;
+
+/* loaded from: classes.dex */
+public class e {
+    public java.lang.String a;
+    public java.lang.String b;
+    public java.io.File c = null;
+
+    public e() {
+    }
+
+    public e(java.lang.String str, java.lang.String str2) {
+        d(str);
+        e(str2);
+    }
+
+    public java.io.File a() {
+        return this.c;
+    }
+
+    public java.lang.String b() {
+        return this.a;
+    }
+
+    public java.lang.String c() {
+        return this.b;
+    }
+
+    public void d(java.lang.String str) {
+        this.a = str;
+    }
+
+    public void e(java.lang.String str) {
+        this.b = str;
+    }
+}
+=== analysis/full_f/f/f.java ===
+package f.j.a.f;
+
+/* loaded from: classes.dex */
+public class f {
+    public static android.content.SharedPreferences a = null;
+    public static android.content.SharedPreferences.Editor b = null;
+    public static java.lang.String c = "";
+
+    public static java.lang.String a(android.content.Context context) {
+        android.content.SharedPreferences defaultSharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+        a = defaultSharedPreferences;
+        java.lang.String string = defaultSharedPreferences.getString(tv.danmaku.ijk.media.player.IjkMediaPlayer.OnNativeInvokeListener.ARG_URL, "");
+        c = string;
+        return string.toLowerCase();
+    }
+
+    public static java.lang.String b(android.content.Context context) {
+        android.content.SharedPreferences defaultSharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+        a = defaultSharedPreferences;
+        java.lang.String string = defaultSharedPreferences.getString("notificationkey", "");
+        c = string;
+        return string;
+    }
+
+    public static java.lang.String c(android.content.Context context) {
+        android.content.SharedPreferences defaultSharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+        a = defaultSharedPreferences;
+        java.lang.String string = defaultSharedPreferences.getString("key", "");
+        c = string;
+        return string;
+    }
+
+    public static java.lang.String d(android.content.Context context) {
+        android.content.SharedPreferences defaultSharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+        a = defaultSharedPreferences;
+        java.lang.String string = defaultSharedPreferences.getString("salt", "");
+        c = string;
+        return string;
+    }
+
+    public static void e(android.content.Context context, java.lang.String str) {
+        android.content.SharedPreferences defaultSharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+        a = defaultSharedPreferences;
+        android.content.SharedPreferences.Editor edit = defaultSharedPreferences.edit();
+        b = edit;
+        edit.putString(tv.danmaku.ijk.media.player.IjkMediaPlayer.OnNativeInvokeListener.ARG_URL, str);
+        b.commit();
+    }
+
+    public static void f(android.content.Context context, java.lang.String str) {
+        android.content.SharedPreferences defaultSharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+        a = defaultSharedPreferences;
+        android.content.SharedPreferences.Editor edit = defaultSharedPreferences.edit();
+        b = edit;
+        edit.putString("notificationkey", str);
+        b.commit();
+    }
+
+    public static void g(android.content.Context context, java.lang.String str) {
+        android.content.SharedPreferences defaultSharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+        a = defaultSharedPreferences;
+        android.content.SharedPreferences.Editor edit = defaultSharedPreferences.edit();
+        b = edit;
+        edit.putString("key", str);
+        b.commit();
+    }
+
+    public static void h(android.content.Context context, java.lang.String str) {
+        android.content.SharedPreferences defaultSharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+        a = defaultSharedPreferences;
+        android.content.SharedPreferences.Editor edit = defaultSharedPreferences.edit();
+        b = edit;
+        edit.putString("salt", str);
+        b.commit();
+    }
+}
+=== analysis/full_f/f/g.java ===
+package f.j.a.f;
+
+/* loaded from: classes.dex */
+public class g {
+    public static java.util.List<f.j.a.f.e> b = new java.util.ArrayList();
+    public static f.j.a.f.g c;
+    public android.content.Context a;
+
+    /* loaded from: classes.dex */
+    public static class a {
+        public static java.lang.String a = "http://appstop.site/makrotv/api/";
+        public static java.lang.String b = "dns";
+        public static java.lang.String c = "note";
+
+        /* renamed from: d, reason: collision with root package name */
+        public static java.lang.String f9947d = "intro";
+
+        /* renamed from: e, reason: collision with root package name */
+        public static java.lang.String f9948e = "vpn";
+
+        /* renamed from: f, reason: collision with root package name */
+        public static java.lang.String f9949f = "update";
+    }
+
+    public g(android.content.Context context) {
+        this.a = context;
+    }
+
+    public static f.j.a.f.e a(java.lang.String str, java.lang.String str2) {
+        return new f.j.a.f.e(str, str2);
+    }
+
+    public void b(f.j.a.f.c<java.lang.String> cVar) {
+        new f.j.a.f.d(this.a, f.j.a.f.g.a.b, 1, cVar, "Form", b, java.lang.Boolean.FALSE).executeOnExecutor(android.os.AsyncTask.THREAD_POOL_EXECUTOR, new java.lang.String[0]);
+    }
+
+    public void c(f.j.a.f.c<java.lang.String> cVar) {
+        new f.j.a.f.d(this.a, f.j.a.f.g.a.c, 1, cVar, "Form", b, java.lang.Boolean.FALSE).executeOnExecutor(android.os.AsyncTask.THREAD_POOL_EXECUTOR, new java.lang.String[0]);
+    }
+}

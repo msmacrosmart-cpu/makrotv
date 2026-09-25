@@ -1,0 +1,137 @@
+name: Patch APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      panel_url:
+        description: "URL base do painel (ex: https://makrotv.vercel.app)"
+        required: false
+        default: "https://makrotv.vercel.app"
+  push:
+    branches: ["arena/01a0d735-makrotv"]
+    paths:
+      - "scripts/patch-apk.sh"
+      - ".github/workflows/patch-apk.yml"
+      - "makrotv.apk"
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: arena/01a0d735-makrotv
+          fetch-depth: 0
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install apktool
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq apktool zipalign apksigner 2>&1 | tail -n 20 || sudo apt-get install -y -qq apktool
+          apktool --version || echo "apktool not found, trying manual install"
+          if ! command -v apktool >/dev/null 2>&1; then
+            wget -q https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O /usr/local/bin/apktool
+            wget -q https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.9.3.jar -O /usr/local/bin/apktool.jar
+            chmod +x /usr/local/bin/apktool
+            apktool --version
+          fi
+          java -version
+          which zipalign || echo "zipalign not found (ok, optional)"
+          which apksigner || echo "apksigner not found (will use jarsigner)"
+
+      - name: Patch APK
+        env:
+          PANEL_URL: ${{ github.event.inputs.panel_url || 'https://makrotv.vercel.app' }}
+        run: |
+          echo "Panel URL: $PANEL_URL"
+          chmod +x scripts/patch-apk.sh
+          set -o pipefail
+          echo "=== DEBUG: patch script start ==="
+          cat scripts/patch-apk.sh | head -n 80
+          echo "=== running patch ==="
+          ./scripts/patch-apk.sh "$PANEL_URL" 2>&1 | tee /tmp/patch.log; PATCH_EXIT=${PIPESTATUS[0]}
+          cat /tmp/patch.log
+          echo "Patch exit code: $PATCH_EXIT"
+          if [ $PATCH_EXIT -ne 0 ]; then
+            echo "=== PATCH FAILED, trying fallback decode without resources ==="
+            cat /tmp/patch.log | tail -n 100
+            # try manual apktool steps with --only-main-classes or -r
+            echo "=== fallback: decode with -r (no res) ==="
+            rm -rf /tmp/makrotv-patch-*/app 2>/dev/null || true
+            mkdir -p /tmp/manual
+            apktool d makrotv.apk -o /tmp/manual/app -r -f 2>&1 | tee -a /tmp/patch.log || true
+            grep -r "appstop.site" /tmp/manual/app --include="*.smali" | head -n 5 || echo "fallback grep no appstop"
+            # try sed fallback
+            find /tmp/manual/app -type f -name "*.smali" -exec sed -i "s|http://appstop.site/makrotv/api/|https://makrotv.vercel.app/makrotv/api/|g" {} \; || true
+            grep -r "makrotv.vercel.app" /tmp/manual/app --include="*.smali" | head -n 5 || echo "fallback sed not found"
+            apktool b /tmp/manual/app -o /tmp/manual/out.apk 2>&1 | tee -a /tmp/patch.log || true
+            if [ -f /tmp/manual/out.apk ]; then
+              echo "fallback build succeeded"
+              mkdir -p apk-patched
+              cp /tmp/manual/out.apk apk-patched/makrotv-patched-unsigned.apk
+              # sign fallback
+              if command -v apksigner >/dev/null 2>&1; then
+                keytool -genkey -v -keystore /tmp/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US" 2>&1 | tail -n 5 || true
+                apksigner sign --ks /tmp/debug.keystore --ks-pass pass:android --key-pass pass:android --out apk-patched/makrotv-patched.apk /tmp/manual/out.apk 2>&1 | tee -a /tmp/patch.log || cp /tmp/manual/out.apk apk-patched/makrotv-patched.apk
+              else
+                cp /tmp/manual/out.apk apk-patched/makrotv-patched.apk
+              fi
+              ls -lh apk-patched/
+              PATCH_EXIT=0
+            else
+              echo "fallback also failed"
+              exit 1
+            fi
+          fi
+          ls -lh apk-patched/ || true
+          echo "=== verifying patched URL in smali ==="
+          if [ -f apk-patched/makrotv-patched.apk ]; then
+            echo "Patched APK exists: $(du -h apk-patched/makrotv-patched.apk | cut -f1)"
+            unzip -p apk-patched/makrotv-patched.apk classes.dex 2>&1 | strings | grep -F "makrotv.vercel.app" | head -n 5 || echo "checking via strings inside apk failed"
+            mkdir -p /tmp/verify && apktool d apk-patched/makrotv-patched.apk -o /tmp/verify/app -f 2>&1 | tail -n 20 || true
+            grep -r "makrotv.vercel.app" /tmp/verify/app --include="*.smali" 2>/dev/null | head -n 5 || echo "not found in smali verify"
+            grep -r "appstop.site" /tmp/verify/app --include="*.smali" 2>/dev/null | head -n 5 && echo "ERROR: appstop still present" || echo "OK: appstop removed"
+          else
+            echo "ERROR: patched apk not found after fallback"
+            exit 1
+          fi
+
+      - name: Prepare public APK for Vercel
+        run: |
+          mkdir -p public
+          cp -v apk-patched/makrotv-patched.apk public/makrotv-patched.apk
+          ls -lh public/makrotv-patched.apk
+          echo "=== also keep copy in apk-patched for releases ==="
+          ls -lh apk-patched/
+
+      - name: Commit patched APK
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f public/makrotv-patched.apk apk-patched/makrotv-patched.apk || git add public/makrotv-patched.apk apk-patched/makrotv-patched.apk || true
+          git status
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+          else
+            git commit -m "chore: patched APK for https://makrotv.vercel.app
+
+            - Base URL http://appstop.site/makrotv/api/ -> https://makrotv.vercel.app/makrotv/api/
+            - Generated via scripts/patch-apk.sh + apktool + apksigner
+            - Available at /api/apk/download and /makrotv-patched.apk"
+            git push origin arena/01a0d735-makrotv
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: makrotv-patched
+          path: apk-patched/makrotv-patched.apk
+          if-no-files-found: error

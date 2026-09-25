@@ -1,0 +1,191 @@
+=== j1 method ===
+30:    public java.lang.String b0;
+57:        public void onClick(android.view.View view) {
+135:        public void onClick(android.view.View view) {
+203:        public void onClick(android.view.View view) {
+332:        public k() {
+540:    public static java.lang.String j1(java.lang.String str) {
+744:        this.B = j1(sb.toString());
+749:        f.j.a.f.g.b.add(f.j.a.f.g.a("sc", this.B));
+1055:                                    new boxbr.apksrebrand.smarters.view.activity.SplashActivity.k().execute(new java.lang.Void[0]);
+1158:                            this.b0 = j1(f.j.a.f.b.a.optString("su") + "*" + f.j.a.f.f.d(this) + "*" + f.j.a.f.b.b);
+1159:                            f.j.a.f.b.a.getString("sc").equalsIgnoreCase(this.b0);
+1276:            startService(new android.content.Intent(getBaseContext(), (java.lang.Class<?>) boxbr.apksrebrand.smarters.miscelleneious.StopProcessingTasksService.class));
+540:    public static java.lang.String j1(java.lang.String str) {
+    public static java.lang.String j1(java.lang.String str) {
+        try {
+            java.security.MessageDigest messageDigest = java.security.MessageDigest.getInstance("MD5");
+            messageDigest.update(str.getBytes());
+            byte[] digest = messageDigest.digest();
+            java.lang.StringBuilder sb = new java.lang.StringBuilder();
+            for (byte b2 : digest) {
+                java.lang.String hexString = java.lang.Integer.toHexString(b2 & 255);
+                while (hexString.length() < 2) {
+                    hexString = "0" + hexString;
+                }
+                sb.append(hexString);
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e2) {
+            e2.printStackTrace();
+            return "";
+        }
+    }
+
+    @Override // f.j.a.k.f.f
+    public void H(boxbr.apksrebrand.smarters.model.callback.LoginCallback loginCallback, java.lang.String str, java.util.ArrayList<java.lang.String> arrayList) {
+        android.content.Intent intent;
+        try {
+            if (loginCallback.b() == null || loginCallback.a() == null) {
+                if (arrayList == null || arrayList.size() <= 0) {
+                    intent = new android.content.Intent(this, (java.lang.Class<?>) boxbr.apksrebrand.smarters.view.activity.MultiUserActivity.class);
+                    startActivity(intent);
+                    finish();
+                    f.j.a.h.i.e.j0(this.t, "Your Account is invalid or has expired !");
+                    return;
+    public static java.lang.String j1(java.lang.String str) {
+        try {
+            java.security.MessageDigest messageDigest = java.security.MessageDigest.getInstance("MD5");
+            messageDigest.update(str.getBytes());
+            byte[] digest = messageDigest.digest();
+            java.lang.StringBuilder sb = new java.lang.StringBuilder();
+            for (byte b2 : digest) {
+                java.lang.String hexString = java.lang.Integer.toHexString(b2 & 255);
+                while (hexString.length() < 2) {
+                    hexString = "0" + hexString;
+                }
+                sb.append(hexString);
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e2) {
+            e2.printStackTrace();
+            return "";
+        }
+    }
+
+    @Override // f.j.a.k.f.f
+    public void H(boxbr.apksrebrand.smarters.model.callback.LoginCallback loginCallback, java.lang.String str, java.util.ArrayList<java.lang.String> arrayList) {
+        android.content.Intent intent;
+        try {
+            if (loginCallback.b() == null || loginCallback.a() == null) {
+                if (arrayList == null || arrayList.size() <= 0) {
+                    intent = new android.content.Intent(this, (java.lang.Class<?>) boxbr.apksrebrand.smarters.view.activity.MultiUserActivity.class);
+                    startActivity(intent);
+                    finish();
+                    f.j.a.h.i.e.j0(this.t, "Your Account is invalid or has expired !");
+                    return;
+--
+        this.B = j1(sb.toString());
+        java.util.ArrayList arrayList = new java.util.ArrayList();
+        f.j.a.f.g.b = arrayList;
+        arrayList.add(f.j.a.f.g.a(com.facebook.internal.m.a, "gu"));
+        f.j.a.f.g.b.add(f.j.a.f.g.a("k", f.j.a.f.f.c(this)));
+        f.j.a.f.g.b.add(f.j.a.f.g.a("sc", this.B));
+        if (f.j.a.i.p.l.f(this.t).equals("m3u")) {
+            list = f.j.a.f.g.b;
+        } else {
+            list = f.j.a.f.g.b;
+            str = this.F;
+        }
+        list.add(f.j.a.f.g.a("u", str));
+        f.j.a.f.g.b.add(f.j.a.f.g.a("pw", "no_password"));
+        f.j.a.f.g.b.add(f.j.a.f.g.a("r", f.j.a.f.b.b));
+        f.j.a.f.g.b.add(f.j.a.f.g.a("av", this.D));
+        f.j.a.f.g.b.add(f.j.a.f.g.a("dt", tv.danmaku.ijk.media.player.IjkMediaMeta.IJKM_VAL_TYPE__UNKNOWN));
+        f.j.a.f.g.b.add(f.j.a.f.g.a("d", e1()));
+        f.j.a.f.g.b.add(f.j.a.f.g.a("do", this.C));
+        f.j.a.f.g.c.b(this);
+    }
+
+    @Override // f.j.a.k.f.f
+    public void U(boxbr.apksrebrand.smarters.model.callback.LoginCallback loginCallback, java.lang.String str) {
+        java.lang.String string;
+        if (this.t != null) {
+            if (loginCallback == null || loginCallback.b() == null) {
+                startActivity(new android.content.Intent(this, (java.lang.Class<?>) boxbr.apksrebrand.smarters.view.activity.NewDashboardActivity.class));
+                finish();
+                e(getResources().getString(brstore.makro.app.R.string.invalid_server_response));
+                return;
+--
+                            this.b0 = j1(f.j.a.f.b.a.optString("su") + "*" + f.j.a.f.f.d(this) + "*" + f.j.a.f.b.b);
+                            f.j.a.f.b.a.getString("sc").equalsIgnoreCase(this.b0);
+                            if (!f.j.a.i.p.l.f(this.t).equals("m3u")) {
+                                java.lang.String string = this.r.getString("username", "");
+                                java.lang.String string2 = this.r.getString("password", "");
+                                if (string != null && string2 != null && !string.equals("") && !string2.equals("")) {
+                                    this.F = string;
+                                    this.G = string2;
+                                }
+                                this.K.putString(f.j.a.h.i.a.f10105o, f.j.a.f.f.a(this));
+                                this.K.apply();
+                                this.L.putString(f.j.a.h.i.a.f10105o, f.j.a.f.f.a(this));
+                                this.L.putString("username", this.F);
+                                this.L.apply();
+                                l1((f.j.a.h.i.a.f10096f.booleanValue() ? this.H : this.H).toLowerCase());
+                                return;
+                            }
+                            if (this.c0 != null && this.c0.equals("file")) {
+                                new boxbr.apksrebrand.smarters.view.activity.SplashActivity.m().executeOnExecutor(android.os.AsyncTask.THREAD_POOL_EXECUTOR, this.d0);
+                                return;
+                            }
+                            if (this.c0 == null || !this.c0.equals(tv.danmaku.ijk.media.player.IjkMediaPlayer.OnNativeInvokeListener.ARG_URL)) {
+                                return;
+                            }
+                            if (android.os.Build.VERSION.SDK_INT >= 19) {
+                                file = new java.io.File(android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS), "BoxBRApks");
+                            } else {
+                                file = new java.io.File(android.os.Environment.getExternalStorageDirectory() + "/Download", "BoxBRApks");
+                            }
+                            new boxbr.apksrebrand.smarters.view.activity.SplashActivity.m().executeOnExecutor(android.os.AsyncTask.THREAD_POOL_EXECUTOR, file + "/data.txt");
+                            return;
+    public void h0(java.lang.String str, int i2, boolean z) {
+        android.content.Intent intent;
+        java.io.File file;
+        if (z) {
+            try {
+                if (i2 == 1) {
+                    org.json.JSONObject jSONObject = new org.json.JSONObject(str);
+                    f.j.a.f.b.a = jSONObject;
+                    if (jSONObject.getString("status").equalsIgnoreCase("true")) {
+                        this.H = f.j.a.f.b.a.getString("su");
+                        f.j.a.f.b.a.getString("ndd");
+                        java.lang.System.currentTimeMillis();
+                        try {
+                            f.j.a.f.f.e(this, f.j.a.f.b.a.optString("su"));
+                            this.b0 = j1(f.j.a.f.b.a.optString("su") + "*" + f.j.a.f.f.d(this) + "*" + f.j.a.f.b.b);
+                            f.j.a.f.b.a.getString("sc").equalsIgnoreCase(this.b0);
+                            if (!f.j.a.i.p.l.f(this.t).equals("m3u")) {
+                                java.lang.String string = this.r.getString("username", "");
+                                java.lang.String string2 = this.r.getString("password", "");
+                                if (string != null && string2 != null && !string.equals("") && !string2.equals("")) {
+                                    this.F = string;
+                                    this.G = string2;
+                                }
+                                this.K.putString(f.j.a.h.i.a.f10105o, f.j.a.f.f.a(this));
+                                this.K.apply();
+                                this.L.putString(f.j.a.h.i.a.f10105o, f.j.a.f.f.a(this));
+                                this.L.putString("username", this.F);
+                                this.L.apply();
+                                l1((f.j.a.h.i.a.f10096f.booleanValue() ? this.H : this.H).toLowerCase());
+                                return;
+                            }
+                            if (this.c0 != null && this.c0.equals("file")) {
+                                new boxbr.apksrebrand.smarters.view.activity.SplashActivity.m().executeOnExecutor(android.os.AsyncTask.THREAD_POOL_EXECUTOR, this.d0);
+                                return;
+                            }
+                            if (this.c0 == null || !this.c0.equals(tv.danmaku.ijk.media.player.IjkMediaPlayer.OnNativeInvokeListener.ARG_URL)) {
+                                return;
+                            }
+                            if (android.os.Build.VERSION.SDK_INT >= 19) {
+                                file = new java.io.File(android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS), "BoxBRApks");
+                            } else {
+                                file = new java.io.File(android.os.Environment.getExternalStorageDirectory() + "/Download", "BoxBRApks");
+                            }
+                            new boxbr.apksrebrand.smarters.view.activity.SplashActivity.m().executeOnExecutor(android.os.AsyncTask.THREAD_POOL_EXECUTOR, file + "/data.txt");
+                            return;
+                        } catch (java.lang.Exception unused) {
+                            startActivity(f.j.a.h.i.a.f10098h.booleanValue() ? new android.content.Intent(this, (java.lang.Class<?>) boxbr.apksrebrand.smarters.view.activity.RoutingActivity.class) : new android.content.Intent(this, (java.lang.Class<?>) boxbr.apksrebrand.smarters.view.activity.LoginActivity.class));
+                            overridePendingTransition(brstore.makro.app.R.anim.fade_out, brstore.makro.app.R.anim.fade_in);
+                        }
+                    } else {
+                        android.widget.Toast.makeText(this, this.t.getResources().getString(brstore.makro.app.R.string.status_suspend), 0).show();

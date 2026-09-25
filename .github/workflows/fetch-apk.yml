@@ -1,0 +1,21 @@
+name: Fetch APK
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: arena/01a0d735-makrotv
+      - name: Verify APK
+        run: |
+          ls -lh makrotv.apk apk/makrotv.apk
+          echo "APK size: $(du -h makrotv.apk | cut -f1)"
+          echo "Package: brstore.makro.app"
+          echo "Original panel: http://appstop.site/makrotv/api/ (suspended)"
+          echo "New panel will be at /api/dns and /makrotv/api/dns"
