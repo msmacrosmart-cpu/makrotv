@@ -128,7 +128,6 @@ if unzip -p "$FINAL" classes.dex | strings | grep -Fq "appstop.site"; then
   exit 1
 fi
 
-cp -f "$FINAL" "$OUT_DIR/makrotv-patched.apk"
 ls -lh "$FINAL"
 stat -c 'bytes=%s' "$FINAL"
 echo "APK pronto: $FINAL"

@@ -63,39 +63,22 @@ jobs:
           apksigner version
 
       - name: Rebuild, align and sign APK
-        id: rebuild
-        continue-on-error: true
         env:
           PANEL_URL: ${{ github.event.inputs.panel_url || 'https://makrotv.vercel.app' }}
         run: |
-          set -o pipefail
+          set -euo pipefail
           chmod +x scripts/patch-apk.sh
-          ./scripts/patch-apk.sh "$PANEL_URL" 2>&1 | tee patch-apk.log
-          status=${PIPESTATUS[0]}
-          test "$status" -eq 0
+          ./scripts/patch-apk.sh "$PANEL_URL"
           test -s apk-patched/makrotv-patched.apk
-          echo "APK bytes: $(stat -c '%s' apk-patched/makrotv-patched.apk)" | tee -a patch-apk.log
-          unzip -p apk-patched/makrotv-patched.apk classes.dex | strings | grep -F "makrotv.vercel.app" | tee -a patch-apk.log
+          echo "APK bytes: $(stat -c '%s' apk-patched/makrotv-patched.apk)"
+          unzip -p apk-patched/makrotv-patched.apk classes.dex | strings | grep -F "makrotv.vercel.app"
           if unzip -p apk-patched/makrotv-patched.apk classes.dex | strings | grep -Fq "appstop.site"; then
-            echo "old panel URL still present" | tee -a patch-apk.log >&2
+            echo "old panel URL still present" >&2
             exit 1
           fi
 
-      - name: Publish temporary APK diagnostic
-        if: steps.rebuild.outcome == 'failure'
-        run: |
-          set -euo pipefail
-          git checkout -- apk-patched/makrotv-patched.apk public/makrotv-patched.apk || true
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f patch-apk.log
-          git commit -m "ci: publish temporary APK rebuild diagnostic"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
-          exit 1
-
       - name: Copy APK to Vercel public directory
         run: |
-          rm -f patch-apk.log
           cp -f apk-patched/makrotv-patched.apk public/makrotv-patched.apk
           ls -lh apk-patched/makrotv-patched.apk public/makrotv-patched.apk
 
