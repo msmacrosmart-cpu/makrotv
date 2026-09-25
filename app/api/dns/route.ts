@@ -14,6 +14,10 @@ function md5(str: string): string {
   return crypto.createHash("md5").update(str).digest("hex");
 }
 
+function sanitizeDns(value: string): string {
+  return value.trim().replace(/\/+$/, "");
+}
+
 // Salt used in original app for sc calculation: "NB!@#12ZKWd" (from f.java h)
 const SALT = "NB!@#12ZKWd";
 const EMPTY_B = ""; // f.j.a.f.b.b
@@ -83,7 +87,7 @@ async function handle(req: NextRequest) {
     const client = getClientByUsername(username);
     if (client && client.serverId) {
       const srv = getServer(client.serverId);
-      if (srv && srv.status === "active") targetServers = [srv.url];
+      if (srv && srv.status === "active") targetServers = [sanitizeDns(srv.url)];
     }
     // if not found, fallback to default
   }
@@ -92,7 +96,7 @@ async function handle(req: NextRequest) {
     const servers = listServers().filter((s) => s.status === "active");
     if (servers.length > 0) {
       // if multiple, return comma-separated as original did comma-split
-      targetServers = servers.map((s) => s.url);
+      targetServers = servers.map((s) => sanitizeDns(s.url)).filter(Boolean);
       // For backward compat, if client has linked server but username not supplied, we could still return all.
     } else {
       // fallback to env
@@ -102,27 +106,27 @@ async function handle(req: NextRequest) {
 
   const su = targetServers.join(",");
   const sc = md5(`${su}*${SALT}*${EMPTY_B}`);
+  const hasDns = targetServers.length > 0;
 
-  // Original response also included: status true/false, su, sc, ndd, etc.
-  const response: any = {
-    status: "true",
+  // Keep the legacy Xtream payload while exposing the sanitized URL explicitly.
+  const response = {
+    status: hasDns ? "true" : "false",
     su,
     sc,
     ndd: "0",
-    msg: "OK",
+    msg: hasDns ? "OK" : "Nenhum servidor DNS ativo configurado.",
+    url: targetServers[0] || "",
+    dns: su,
+    servers: targetServers,
+    timestamp: new Date().toISOString(),
   };
-
-  // Also support alternative field names for flexibility
-  // For our own patched APK we can also return dns field
-  response.dns = su;
-  response.servers = targetServers;
-  response.timestamp = new Date().toISOString();
 
   // Log for debugging (optional)
   // console.log("DNS request", params, "->", response);
 
   return NextResponse.json(response, {
     headers: {
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
     },
   });
