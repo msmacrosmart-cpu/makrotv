@@ -1,8 +1,7 @@
 {
   "framework": "nextjs",
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
   "installCommand": "npm install",
+  "buildCommand": "npm run build",
   "env": {
     "ADMIN_USERNAME": "admin",
     "ADMIN_PASSWORD": "admin123",
