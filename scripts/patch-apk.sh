@@ -51,10 +51,24 @@ rm -rf "$WORK_DIR" "$OUT_DIR"
 mkdir -p "$WORK_DIR" "$OUT_DIR"
 
 echo "[1/5] Decodificando APK..."
-apktool d "$APK_IN" -o "$WORK_DIR/app" -f
+set +e
+apktool d "$APK_IN" -o "$WORK_DIR/app" -f 2>&1 | tee /tmp/apktool-decode.log
+DECODE_EXIT=${PIPESTATUS[0]}
+cat /tmp/apktool-decode.log
+if [ $DECODE_EXIT -ne 0 ]; then
+  echo "Aviso: apktool decode com recursos falhou (exit $DECODE_EXIT), tentando com -r (skip resources) ..."
+  rm -rf "$WORK_DIR/app"
+  apktool d "$APK_IN" -o "$WORK_DIR/app" -r -f 2>&1 | tee /tmp/apktool-decode2.log
+  cat /tmp/apktool-decode2.log
+  if [ ${PIPESTATUS[0]} -ne 0 ]; then
+    echo "Erro: apktool decode falhou mesmo com -r"
+    exit 1
+  fi
+fi
+set -e
 
 echo "[2/5] Procurando URLs hardcoded..."
-grep -r "appstop.site" "$WORK_DIR/app" --include="*.smali" --include="*.xml" -n || echo "Nenhum appstop restante (ok)"
+grep -r "appstop.site" "$WORK_DIR/app" --include="*.smali" --include="*.xml" -n || echo "Nenhum appstop encontrado antes (ok, já patchado?)"
 
 echo "[3/5] Substituindo URL..."
 # Substitui em smali e xml
@@ -69,7 +83,23 @@ grep -r "$NEW_BASE" "$WORK_DIR/app" --include="*.smali" -n | head -n 20 || echo 
 cat "$WORK_DIR/app/smali/f/j/a/f/g.smali" 2>/dev/null | grep -A2 -B2 "const-string" | head -n 30 || true
 
 echo "[4/5] Recompilando..."
-apktool b "$WORK_DIR/app" -o "$OUT_DIR/makrotv-patched-unsigned.apk"
+set +e
+apktool b "$WORK_DIR/app" -o "$OUT_DIR/makrotv-patched-unsigned.apk" 2>&1 | tee /tmp/apktool-build.log
+BUILD_EXIT=${PIPESTATUS[0]}
+cat /tmp/apktool-build.log
+if [ $BUILD_EXIT -ne 0 ]; then
+  echo "Aviso: apktool build falhou (exit $BUILD_EXIT), tentando com --use-aapt2 ..."
+  apktool b "$WORK_DIR/app" -o "$OUT_DIR/makrotv-patched-unsigned.apk" --use-aapt2 2>&1 | tee /tmp/apktool-build2.log || true
+  cat /tmp/apktool-build2.log
+  if [ ! -f "$OUT_DIR/makrotv-patched-unsigned.apk" ]; then
+    echo "Erro: build falhou mesmo com --use-aapt2"
+    # mostra último log
+    cat /tmp/apktool-build.log | tail -n 100
+    cat /tmp/apktool-build2.log | tail -n 100
+    exit 1
+  fi
+fi
+set -e
 
 echo "[5/5] Assinando (debug keystore)..."
 # Gera keystore debug se não existir
