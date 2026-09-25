@@ -16,7 +16,7 @@ jobs:
         with:
           ref: arena/01a0d735-makrotv
           fetch-depth: 0
-      - name: Download APK
+      - name: Download APK if missing
         run: |
           set -e
           if [ ! -f makrotv.apk ]; then
@@ -27,50 +27,51 @@ jobs:
             mkdir -p apk
             cp makrotv.apk apk/makrotv.apk
           else
-            echo "APK already exists"
+            echo "APK exists"
             ls -lh makrotv.apk
           fi
-      - name: APK Analysis
-        if: always()
+      - name: APK Analysis simple
         run: |
-          set -e
-          sudo apt-get update && sudo apt-get install -y unzip wget python3
+          set -x
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq unzip wget > /dev/null
+          echo "install jadx"
           wget -q https://github.com/skylot/jadx/releases/download/v1.5.0/jadx-1.5.0.zip -O jadx.zip
           unzip -q jadx.zip -d jadx
           chmod +x jadx/bin/jadx
-          wget -q https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.9.3.jar -O apktool.jar
+          echo "jadx version"
+          jadx/bin/jadx --version || ./jadx/bin/jadx --version || true
+          echo "download apktool jar"
+          wget -q https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.9.3.jar -O apktool.jar || wget -q https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar -O apktool.jar || echo "failed apktool"
+          ls -lh apktool.jar || true
           mkdir -p analysis
-          ./jadx/bin/jadx -d analysis/jadx makrotv.apk || echo "jadx failed"
-          java -jar apktool.jar d makrotv.apk -o analysis/apktool || echo "apktool failed"
+          echo "run jadx"
+          timeout 120 ./jadx/bin/jadx -d analysis/jadx makrotv.apk || echo "jadx timeout or error $?"
+          echo "jadx done"
+          ls -R analysis/jadx 2>&1 | head -n 100 || true
+          echo "apktool"
+          timeout 120 java -jar apktool.jar d makrotv.apk -o analysis/apktool -f || echo "apktool error $?"
+          ls -R analysis/apktool 2>&1 | head -n 100 || true
+          echo "grep phase"
+          mkdir -p analysis
           echo "=== GREP appstop ===" > analysis/report.txt
-          grep -r "appstop" analysis --include="*.java" --include="*.xml" --include="*.smali" -n | head -n 500 >> analysis/report.txt || echo "no appstop grep" >> analysis/report.txt
+          grep -r "appstop" analysis --include="*.java" --include="*.xml" -n | head -n 500 >> analysis/report.txt || echo "no appstop grep" >> analysis/report.txt
           echo "=== GREP makrotv ===" >> analysis/report.txt
           grep -r "makrotv" analysis --include="*.java" --include="*.xml" -n | head -n 500 >> analysis/report.txt || true
-          echo "=== GREP 135.148 ===" >> analysis/report.txt
-          grep -R "135.148\|51.75" analysis --include="*.java" -n | head -n 200 >> analysis/report.txt || true
-          echo "=== GREP BASE_URL ===" >> analysis/report.txt
-          grep -R "BASE_URL\|baseUrl\|server_url\|SERVER_URL" analysis --include="*.java" -n | head -n 500 >> analysis/report.txt || true
-          echo "=== Package list ===" >> analysis/report.txt
-          ls -R analysis/jadx/sources 2>&1 | head -n 1000 >> analysis/report.txt || ls -R analysis/jadx | head -n 1000 >> analysis/report.txt || true
-          echo "=== Manifest ===" >> analysis/report.txt
-          cat analysis/apktool/AndroidManifest.xml 2>&1 | head -n 1000 >> analysis/report.txt || true
-          echo "=== Strings http ===" >> analysis/report.txt
-          strings makrotv.apk | grep -E "http" | head -n 200 >> analysis/report.txt || true
+          echo "=== manifest ===" >> analysis/report.txt
+          cat analysis/apktool/AndroidManifest.xml 2>&1 | head -n 500 >> analysis/report.txt || true
+          echo "=== strings http ===" >> analysis/report.txt
+          strings makrotv.apk | grep -E "http" | head -n 100 >> analysis/report.txt || true
           cat analysis/report.txt
-          # Also extract specific files
-          find analysis/jadx -name "*.java" | xargs grep -l "appstop\|ApiService\|Retrofit\|player_api" 2>/dev/null | head -n 20
-          for f in $(find analysis/jadx -name "*.java" | xargs grep -l "appstop\|ApiService\|Retrofit" 2>/dev/null | head -n 10); do
-            echo "===== FILE $f =====" >> analysis/report.txt
-            cat "$f" >> analysis/report.txt
-            echo "" >> analysis/report.txt
-          done
-          cat analysis/report.txt
-      - name: Commit APK and Report
+          # Prepare commit
+          echo "done"
+      - name: Commit Report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add makrotv.apk apk/makrotv.apk analysis/report.txt || true
+          # Remove large jadx output from staging maybe keep only report?
+          git add analysis/report.txt || true
+          # If analysis/jadx exists, add small subset?
           git status
-          git diff --cached --stat
-          git commit -m "Add APK analysis report" || echo "nothing to commit"
-          git push origin arena/01a0d735-makrotv
+          git commit -m "Add APK analysis simple report" || echo "nothing to commit"
+          git push origin arena/01a0d735-makrotv || echo "push failed"
