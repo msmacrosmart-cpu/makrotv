@@ -1,6 +1,5 @@
 name: Fetch APK
 on:
-  workflow_dispatch:
   push:
     branches: [ "arena/01a0d735-makrotv" ]
     paths: [ ".github/workflows/fetch-apk.yml" ]
@@ -16,62 +15,45 @@ jobs:
         with:
           ref: arena/01a0d735-makrotv
           fetch-depth: 0
-      - name: Download APK if missing
+      - name: Extract key source
         run: |
           set -e
-          if [ ! -f makrotv.apk ]; then
-            URL="https://files.catbox.moe/rq155y.apk"
-            echo "Downloading $URL"
-            curl -L -o makrotv.apk "$URL" --fail --progress-bar
-            ls -lh makrotv.apk
-            mkdir -p apk
-            cp makrotv.apk apk/makrotv.apk
-          else
-            echo "APK exists"
-            ls -lh makrotv.apk
-          fi
-      - name: APK Analysis simple
-        run: |
-          set -x
           sudo apt-get update -qq
           sudo apt-get install -y -qq unzip wget > /dev/null
-          echo "install jadx"
           wget -q https://github.com/skylot/jadx/releases/download/v1.5.0/jadx-1.5.0.zip -O jadx.zip
           unzip -q jadx.zip -d jadx
-          chmod +x jadx/bin/jadx
-          echo "jadx version"
-          jadx/bin/jadx --version || ./jadx/bin/jadx --version || true
-          echo "download apktool jar"
-          wget -q https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.9.3.jar -O apktool.jar || wget -q https://github.com/iBotPeaches/Apktool/releases/download/v2.9.3/apktool_2.9.3.jar -O apktool.jar || echo "failed apktool"
-          ls -lh apktool.jar || true
-          mkdir -p analysis
-          echo "run jadx"
-          timeout 120 ./jadx/bin/jadx -d analysis/jadx makrotv.apk || echo "jadx timeout or error $?"
-          echo "jadx done"
-          ls -R analysis/jadx 2>&1 | head -n 100 || true
-          echo "apktool"
-          timeout 120 java -jar apktool.jar d makrotv.apk -o analysis/apktool -f || echo "apktool error $?"
-          ls -R analysis/apktool 2>&1 | head -n 100 || true
-          echo "grep phase"
-          mkdir -p analysis
-          echo "=== GREP appstop ===" > analysis/report.txt
-          grep -r "appstop" analysis --include="*.java" --include="*.xml" -n | head -n 500 >> analysis/report.txt || echo "no appstop grep" >> analysis/report.txt
-          echo "=== GREP makrotv ===" >> analysis/report.txt
-          grep -r "makrotv" analysis --include="*.java" --include="*.xml" -n | head -n 500 >> analysis/report.txt || true
-          echo "=== manifest ===" >> analysis/report.txt
-          cat analysis/apktool/AndroidManifest.xml 2>&1 | head -n 500 >> analysis/report.txt || true
-          echo "=== strings http ===" >> analysis/report.txt
-          strings makrotv.apk | grep -E "http" | head -n 100 >> analysis/report.txt || true
-          cat analysis/report.txt
-          # Prepare commit
-          echo "done"
-      - name: Commit Report
+          ./jadx/bin/jadx -d /tmp/jadx makrotv.apk --no-imports 2>&1 | head -n 50 || true
+          mkdir -p analysis/keyfiles
+          # Find and copy key files
+          find /tmp/jadx -type f -name "*.java" | xargs grep -l "appstop\|BASE_URL" 2>/dev/null | head -n 20
+          for f in $(find /tmp/jadx -type f -name "*.java" | xargs grep -l "appstop\|BASE_URL\|ApiService\|Retrofit" 2>/dev/null | head -n 30); do
+            rel=$(echo "$f" | sed 's|/tmp/jadx/||')
+            mkdir -p "analysis/keyfiles/$(dirname "$rel")"
+            cp "$f" "analysis/keyfiles/$rel"
+            echo "Copied $rel"
+          done
+          # Also get LoginActivity
+          find /tmp/jadx -path "*LoginActivity.java" | head -n 5
+          for f in $(find /tmp/jadx -path "*LoginActivity.java" | head -n 5); do
+            rel=$(echo "$f" | sed 's|/tmp/jadx/||')
+            mkdir -p "analysis/keyfiles/$(dirname "$rel")"
+            cp "$f" "analysis/keyfiles/$rel"
+            echo "LoginActivity $rel"
+          done
+          # Also get any file that contains http://appstop
+          find /tmp/jadx -name "*.java" -exec grep -l "http" {} \; | head -n 20
+          ls -R analysis/keyfiles 2>&1 | head -n 500
+          # Dump one key file
+          cat analysis/keyfiles/sources/f/j/a/f/g.java 2>&1 | head -n 200 || true
+          cat /tmp/jadx/sources/f/j/a/f/g.java 2>&1 | head -n 500 || true
+          # Also try to find SharedPreferences keys
+          grep -R "SharedPreferences\|getString.*url\|loginPrefs" /tmp/jadx/sources --include="*.java" -n | head -n 100 > analysis/shared_prefs.txt || true
+          cat analysis/shared_prefs.txt | head -n 100
+      - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # Remove large jadx output from staging maybe keep only report?
-          git add analysis/report.txt || true
-          # If analysis/jadx exists, add small subset?
+          git add analysis/keyfiles analysis/shared_prefs.txt || true
           git status
-          git commit -m "Add APK analysis simple report" || echo "nothing to commit"
-          git push origin arena/01a0d735-makrotv || echo "push failed"
+          git commit -m "Add key decompiled files" || echo "nothing to commit"
+          git push origin arena/01a0d735-makrotv
