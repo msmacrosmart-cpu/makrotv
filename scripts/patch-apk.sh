@@ -55,12 +55,10 @@ echo "Origem:  $OLD_URL"
 echo "Destino: $PANEL_URL"
 echo "Entrada: $APK_IN"
 
-echo "[1/5] apktool decode"
-if ! apktool d "$APK_IN" -o "$DECODED" -f; then
-  echo "Aviso: decode completo falhou; tentando -r (recursos originais preservados)"
-  rm -rf "$DECODED"
-  apktool d "$APK_IN" -r -o "$DECODED" -f
-fi
+echo "[1/5] apktool decode (preserving original resources)"
+# -r keeps the original resource table/assets intact. This is important for
+# this APK: a full resource rebuild can silently drop binary resources.
+apktool d "$APK_IN" -r -o "$DECODED" -f
 
 echo "[2/5] patch smali/XML and remove testOnly"
 python3 - "$DECODED" "$OLD_URL" "$OLD_HOST" "$PANEL_URL" "$PANEL_ORIGIN" <<'PY'
