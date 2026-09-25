@@ -45,7 +45,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div>
               <div className="font-black leading-none">MakroTV</div>
               <div className="text-xs text-white/50 mt-1">Banners + DNS / URL</div>
-              <div className="text-[10px] text-white/30 font-mono">makrotv.vercel.app</div>
+              <div className="text-[10px] text-white/30 font-mono">makrotv-ten.vercel.app</div>
             </div>
           </Link>
         </div>
@@ -63,13 +63,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="px-3 py-3 rounded-xl bg-[#1a1a1a] border border-white/10">
               <div className="text-xs text-white/50 flex items-center gap-2"><Shield className="w-3 h-3" /> API status</div>
               <div className="text-sm mt-1 flex items-center gap-2"><span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" /> Operacional</div>
-              <div className="text-[11px] text-white/30 font-mono mt-1 truncate">https://makrotv.vercel.app</div>
+              <div className="text-[11px] text-white/30 font-mono mt-1 truncate">https://makrotv-ten.vercel.app</div>
               <Link href="/api/dns" target="_blank" className="text-xs text-white/50 hover:text-white flex items-center gap-1 mt-2">Testar DNS <ExternalLink className="w-3 h-3" /></Link>
             </div>
             <div className="px-3 py-3 rounded-xl bg-gradient-to-br from-red-600 to-red-700 border border-red-500/30 text-white">
               <div className="text-xs font-black flex items-center gap-2"><Tv className="w-3 h-3" /> MakroTV APK</div>
               <div className="text-xs text-white/90 mt-1">brstore.makro.app • v7 • 62 MB</div>
-              <div className="text-xs text-white/70">Apontado para makrotv.vercel.app</div>
+              <div className="text-xs text-white/70">Apontado para makrotv-ten.vercel.app</div>
               <a href="/api/apk/download" className="mt-3 w-full py-2 rounded-xl bg-white text-red-700 text-xs font-black flex items-center justify-center gap-1.5 hover:bg-white/90">
                 <Download className="w-3.5 h-3.5" /> Baixar APK
               </a>

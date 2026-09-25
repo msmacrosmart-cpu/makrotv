@@ -17,7 +17,7 @@ function fileInfo(filePath: string) {
 export async function GET() {
   const patchedPath = path.join(process.cwd(), "public", "makrotv-patched.apk");
   const originalPath = path.join(process.cwd(), "makrotv.apk");
-  const panelUrl = process.env.NEXT_PUBLIC_PANEL_URL || "https://makrotv.vercel.app";
+  const panelUrl = process.env.NEXT_PUBLIC_PANEL_URL || "https://makrotv-ten.vercel.app";
 
   return NextResponse.json({
     ok: true,
@@ -41,7 +41,7 @@ export async function GET() {
     originalPanel: "http://appstop.site/makrotv/api/dns (suspenso - 302)",
     newPanelBase: panelUrl,
     panelUrl,
-    baseUrlHardcoded: "https://makrotv.vercel.app/makrotv/api/",
+    baseUrlHardcoded: "https://makrotv-ten.vercel.app/makrotv/api/",
     patchedApk: "/api/apk/info",
     downloadUrl: "/api/apk/download",
   });

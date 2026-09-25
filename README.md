@@ -144,10 +144,10 @@ App inicia
 **Exemplo:**
 
 ```bash
-curl https://makrotv.vercel.app/api/dns
+curl https://makrotv-ten.vercel.app/api/dns
 # {"status":"true","su":"http://vip-servidor.com:8080,...","sc":"...","dns":"...","servers":[...]}
 
-curl "https://makrotv.vercel.app/player_api.php?username=demo&password=demo123"
+curl "https://makrotv-ten.vercel.app/player_api.php?username=demo&password=demo123"
 # {"user_info":{"auth":1,"status":"Active",...},"server_info":{"url":"http://seu-servidor...","port":"8080",...}}
 ```
 
@@ -159,15 +159,15 @@ curl "https://makrotv.vercel.app/player_api.php?username=demo&password=demo123"
 
 **Adaptação:**
 
-1. **Hardcoded URL trocada:** `http://appstop.site/makrotv/api/` → `https://makrotv.vercel.app/makrotv/api/` (smali `f/j/a/f/g.smali` `const-string`).
+1. **Hardcoded URL trocada:** `http://appstop.site/makrotv/api/` → `https://makrotv-ten.vercel.app/makrotv/api/` (smali `f/j/a/f/g.smali` `const-string`).
 2. **DNS dinâmico já existia:** o app já lê DNS do painel e salva em `serverUrlMAG`; portanto **após patch, alterar DNS no painel reflete instantaneamente nos apps sem recompilar**.
-3. **Login adaptado opcional:** Se quiser autenticar via painel ao invés de Xtream direto, aponte o DNS para o próprio painel (ex: `https://makrotv.vercel.app`); então `player_api.php` do painel validará no `data/db.json` e retornará `server_info` do servidor vinculado.
+3. **Login adaptado opcional:** Se quiser autenticar via painel ao invés de Xtream direto, aponte o DNS para o próprio painel (ex: `https://makrotv-ten.vercel.app`); então `player_api.php` do painel validará no `data/db.json` e retornará `server_info` do servidor vinculado.
 
 **Como gerar novo APK:**
 
 ```bash
 # Método recomendado (apktool, mantém recursos, re-assina)
-./scripts/patch-apk.sh https://makrotv.vercel.app
+./scripts/patch-apk.sh https://makrotv-ten.vercel.app
 
 # Saída: apk-patched/makrotv-patched.apk
 # Instale: adb install -r apk-patched/makrotv-patched.apk
@@ -192,7 +192,7 @@ ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin123          # troque!
 JWT_SECRET=gere-com-openssl-rand-base64-32
 DEFAULT_DNS=http://seu-xtream-real.com:8080
-NEXT_PUBLIC_PANEL_URL=https://makrotv.vercel.app
+NEXT_PUBLIC_PANEL_URL=https://makrotv-ten.vercel.app
 # DATABASE_URL=postgresql://...  # opcional, se migrar para Postgres
 ```
 
@@ -201,17 +201,17 @@ NEXT_PUBLIC_PANEL_URL=https://makrotv.vercel.app
 
 ### Deploy na Vercel (2 cliques)
 
-1. Importe o repo na Vercel (ou conecte `msmacrosmart-cpu/makrotv` no dashboard Vercel) e configure o projeto para o domínio `makrotv.vercel.app`: https://vercel.com/new
+1. Importe o repo na Vercel (ou conecte `msmacrosmart-cpu/makrotv` no dashboard Vercel) e configure o projeto para o domínio `makrotv-ten.vercel.app`: https://vercel.com/new
 2. Configure env vars acima.
 3. Deploy — `npm run build` já testado localmente (✓ 22 rotas, middleware 27 kB).
 4. Após deploy, teste:
    ```bash
-   curl https://makrotv.vercel.app/api/health
-   curl https://makrotv.vercel.app/api/dns
-   curl "https://makrotv.vercel.app/player_api.php?username=demo&password=demo123"
+   curl https://makrotv-ten.vercel.app/api/health
+   curl https://makrotv-ten.vercel.app/api/dns
+   curl "https://makrotv-ten.vercel.app/player_api.php?username=demo&password=demo123"
    ```
 5. No painel (`/login` → `admin/admin123`), cadastre o DNS real em **DNS / URL** e publique os banners em **Banners**.
-6. **Baixe o APK já pronto no painel:** No header da landing (`/`), no dashboard (`/dashboard`) e no menu lateral há botão **“Baixar APK”** → `https://makrotv.vercel.app/api/apk/download` (redirect para `/makrotv-patched.apk`). Status em `https://makrotv.vercel.app/api/apk/info`. Se o APK ainda não foi gerado, dispare o workflow **Patch APK** no GitHub ou gere localmente: `./scripts/patch-apk.sh https://makrotv.vercel.app` → saída `apk-patched/makrotv-patched.apk` + `public/makrotv-patched.apk` (commitado e servido via CDN).
+6. **Baixe o APK já pronto no painel:** No header da landing (`/`), no dashboard (`/dashboard`) e no menu lateral há botão **“Baixar APK”** → `https://makrotv-ten.vercel.app/api/apk/download` (redirect para `/makrotv-patched.apk`). Status em `https://makrotv-ten.vercel.app/api/apk/info`. Se o APK ainda não foi gerado, dispare o workflow **Patch APK** no GitHub ou gere localmente: `./scripts/patch-apk.sh https://makrotv-ten.vercel.app` → saída `apk-patched/makrotv-patched.apk` + `public/makrotv-patched.apk` (commitado e servido via CDN).
 
 ### Local
 
@@ -249,7 +249,7 @@ curl http://localhost:3000/api/dns?u=demo
 ## ⚠️ O que ainda depende de informação/serviço externo
 
 1. **Endereço Xtream real:** `DEFAULT_DNS` e servidores cadastrados no painel precisam ser URLs Xtream válidas (ex: `http://seu-ip:8080`). O painel atual usa `http://seu-servidor-xtream.com:8080` como placeholder — substitua no dashboard antes de distribuir o APK patchado. Sem um Xtream ativo, o app logará mas categorias/filmes ficarão vazios (stub `[]`).
-2. **Domínio Vercel:** Já configurado para `https://makrotv.vercel.app`. O APK patchado em `public/makrotv-patched.apk` já aponta para este domínio e está disponível no painel em **/api/apk/download**.
+2. **Domínio Vercel:** Já configurado para `https://makrotv-ten.vercel.app`. O APK patchado em `public/makrotv-patched.apk` já aponta para este domínio e está disponível no painel em **/api/apk/download**.
 3. **Assinatura APK produção:** O script usa `debug.keystore`. Para Play Store, gere e use sua keystore de release.
 4. **Persistência em Vercel:** `data/db.json` é efêmero no filesystem serverless. Para produção com muitos clientes, migre `lib/db.ts` para `DATABASE_URL` (Postgres/Neon) — instruções no `.env.example`.
 

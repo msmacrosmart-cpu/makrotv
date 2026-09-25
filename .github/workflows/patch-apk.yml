@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       panel_url:
-        description: "URL base do painel (ex: https://makrotv.vercel.app)"
+        description: "URL base do painel (ex: https://makrotv-ten.vercel.app)"
         required: false
-        default: "https://makrotv.vercel.app"
+        default: "https://makrotv-ten.vercel.app"
   push:
     branches: ["arena/01a0d775-makrotv"]
     paths:
@@ -64,14 +64,14 @@ jobs:
 
       - name: Rebuild, align and sign APK
         env:
-          PANEL_URL: ${{ github.event.inputs.panel_url || 'https://makrotv.vercel.app' }}
+          PANEL_URL: ${{ github.event.inputs.panel_url || 'https://makrotv-ten.vercel.app' }}
         run: |
           set -euo pipefail
           chmod +x scripts/patch-apk.sh
           ./scripts/patch-apk.sh "$PANEL_URL"
           test -s apk-patched/makrotv-patched.apk
           echo "APK bytes: $(stat -c '%s' apk-patched/makrotv-patched.apk)"
-          unzip -p apk-patched/makrotv-patched.apk classes.dex | strings | grep -F "makrotv.vercel.app"
+          unzip -p apk-patched/makrotv-patched.apk classes.dex | strings | grep -F "makrotv-ten.vercel.app"
           if unzip -p apk-patched/makrotv-patched.apk classes.dex | strings | grep -Fq "appstop.site"; then
             echo "old panel URL still present" >&2
             exit 1

@@ -7,7 +7,7 @@
     "ADMIN_PASSWORD": "admin123",
     "JWT_SECRET": "makrotv-super-secret-change-em-producao-use-openssl-rand-base64-32",
     "DEFAULT_DNS": "http://seu-servidor-xtream.com:8080",
-    "NEXT_PUBLIC_PANEL_URL": "https://makrotv.vercel.app"
+    "NEXT_PUBLIC_PANEL_URL": "https://makrotv-ten.vercel.app"
   },
   "headers": [
     {

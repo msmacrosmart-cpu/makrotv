@@ -29,7 +29,7 @@ export default function HomePage() {
           <div>
             <div className="inline-flex items-center gap-2 text-xs tracking-widest text-red-400 bg-red-500/10 border border-red-500/20 rounded-full px-3 py-1 mb-4">
               <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              INFRAESTRUTURA PRÓPRIA • https://makrotv.vercel.app
+              INFRAESTRUTURA PRÓPRIA • https://makrotv-ten.vercel.app
             </div>
             <h1 className="text-4xl md:text-5xl font-black leading-[0.95] tracking-tight">
               Seu IPTV, <span className="bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">seu controle.</span>
@@ -49,7 +49,7 @@ export default function HomePage() {
               </Link>
             </div>
             <p className="text-xs text-white/40 mt-3 flex items-center gap-2">
-              <CheckCircle className="w-3 h-3 text-green-500" /> APK já apontado para <span className="font-mono text-white/70">https://makrotv.vercel.app</span> • 62 MB • Android 5.0+
+              <CheckCircle className="w-3 h-3 text-green-500" /> APK já apontado para <span className="font-mono text-white/70">https://makrotv-ten.vercel.app</span> • 62 MB • Android 5.0+
             </p>
             <div className="flex items-center gap-6 mt-6 text-sm text-white/50">
               <span className="flex items-center gap-2"><Zap className="w-4 h-4 text-yellow-500" /> Resposta &lt; 100ms</span>
@@ -68,7 +68,7 @@ export default function HomePage() {
                   <div className="w-3 h-3 rounded-full bg-yellow-500" />
                   <div className="w-3 h-3 rounded-full bg-green-500" />
                 </div>
-                <span className="text-xs text-white/40">makrotv.vercel.app/dashboard</span>
+                <span className="text-xs text-white/40">makrotv-ten.vercel.app/dashboard</span>
               </div>
               <div className="space-y-4">
                 <div className="grid grid-cols-3 gap-3">
@@ -114,7 +114,7 @@ export default function HomePage() {
               </div>
               <h2 className="text-3xl font-black mt-4 leading-tight">Baixe o MakroTV<br />já configurado</h2>
               <p className="text-white/80 mt-3 leading-relaxed">
-                APK patcheado para <span className="font-mono bg-white/20 px-1.5 py-0.5 rounded text-white">https://makrotv.vercel.app</span>.
+                APK patcheado para <span className="font-mono bg-white/20 px-1.5 py-0.5 rounded text-white">https://makrotv-ten.vercel.app</span>.
                 DNS dinâmico: altere servidores no painel e o app atualiza sem recompilar.
               </p>
               <ul className="mt-4 space-y-2 text-sm text-white/90">
@@ -144,7 +144,7 @@ export default function HomePage() {
               <div className="mt-6 space-y-3 text-sm">
                 <div className="flex justify-between p-3 rounded-xl bg-black/5 border border-black/5">
                   <span className="text-black/50">Painel</span>
-                  <span className="font-mono font-bold text-xs">makrotv.vercel.app</span>
+                  <span className="font-mono font-bold text-xs">makrotv-ten.vercel.app</span>
                 </div>
                 <div className="flex justify-between p-3 rounded-xl bg-black/5 border border-black/5">
                   <span className="text-black/50">API DNS</span>
@@ -179,8 +179,8 @@ export default function HomePage() {
       </section>
 
       <footer className="border-t border-white/10 mt-8 py-8 text-center text-sm text-white/40">
-        <p>© {new Date().getFullYear()} MakroTV • Painel próprio • https://makrotv.vercel.app • APK {`brstore.makro.app`}</p>
-        <p className="mt-2 text-xs text-white/30">App original: IPTV Smarters Pro rebrand • Base original: http://appstop.site/makrotv/api/ (suspenso) • Nova URL: https://makrotv.vercel.app</p>
+        <p>© {new Date().getFullYear()} MakroTV • Painel próprio • https://makrotv-ten.vercel.app • APK {`brstore.makro.app`}</p>
+        <p className="mt-2 text-xs text-white/30">App original: IPTV Smarters Pro rebrand • Base original: http://appstop.site/makrotv/api/ (suspenso) • Nova URL: https://makrotv-ten.vercel.app</p>
         <p className="mt-2">
           <a href="/api/apk/download" className="inline-flex items-center gap-2 text-red-400 hover:text-red-300 font-medium"><Download className="w-4 h-4" /> Baixar APK MakroTV</a>
           <span className="mx-2">•</span>
