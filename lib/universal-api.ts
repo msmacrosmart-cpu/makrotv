@@ -21,10 +21,12 @@ function getActiveDns(request: NextRequest) {
     if (server?.status === "active") return sanitizeDns(server.url);
   }
 
-  return listServers()
+  const configuredDns = listServers()
     .filter((server) => server.status === "active")
     .map((server) => sanitizeDns(server.url))
-    .find(Boolean) || "";
+    .find(Boolean);
+
+  return configuredDns || sanitizeDns(process.env.DEFAULT_DNS || "http://127.0.0.1:8080");
 }
 
 export function universalResponse(request: NextRequest) {

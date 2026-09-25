@@ -109,9 +109,15 @@ async function handle(req: NextRequest) {
       targetServers = servers.map((s) => sanitizeDns(s.url)).filter(Boolean);
       // For backward compat, if client has linked server but username not supplied, we could still return all.
     } else {
-      // fallback to env
-      targetServers = [];
+      // Use the configured fallback when the panel has no active servers.
+      const fallbackDns = sanitizeDns(process.env.DEFAULT_DNS || "http://127.0.0.1:8080");
+      if (fallbackDns) targetServers = [fallbackDns];
     }
+  }
+
+  if (targetServers.length === 0) {
+    const fallbackDns = sanitizeDns(process.env.DEFAULT_DNS || "http://127.0.0.1:8080");
+    if (fallbackDns) targetServers = [fallbackDns];
   }
 
   const su = targetServers.join(",");
