@@ -19,22 +19,58 @@ jobs:
       - name: Download APK
         run: |
           set -e
-          URL="https://files.catbox.moe/rq155y.apk"
-          echo "Downloading $URL"
-          curl -L -o makrotv.apk "$URL" --fail --progress-bar
-          ls -lh makrotv.apk
-          file makrotv.apk || true
-          # Also try to get info
-          du -h makrotv.apk
-          # Keep a copy in apk folder
-          mkdir -p apk
-          cp makrotv.apk apk/makrotv.apk
-          # Also save short link redirect info
-          curl -L -I "https://bit.ly/makrotvfinalv7" || true
-      - name: Commit APK
+          if [ ! -f makrotv.apk ]; then
+            URL="https://files.catbox.moe/rq155y.apk"
+            echo "Downloading $URL"
+            curl -L -o makrotv.apk "$URL" --fail --progress-bar
+            ls -lh makrotv.apk
+            mkdir -p apk
+            cp makrotv.apk apk/makrotv.apk
+          else
+            echo "APK already exists"
+            ls -lh makrotv.apk
+          fi
+      - name: APK Analysis
+        if: always()
+        run: |
+          set -e
+          sudo apt-get update && sudo apt-get install -y unzip wget python3
+          wget -q https://github.com/skylot/jadx/releases/download/v1.5.0/jadx-1.5.0.zip -O jadx.zip
+          unzip -q jadx.zip -d jadx
+          chmod +x jadx/bin/jadx
+          wget -q https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.9.3.jar -O apktool.jar
+          mkdir -p analysis
+          ./jadx/bin/jadx -d analysis/jadx makrotv.apk || echo "jadx failed"
+          java -jar apktool.jar d makrotv.apk -o analysis/apktool || echo "apktool failed"
+          echo "=== GREP appstop ===" > analysis/report.txt
+          grep -r "appstop" analysis --include="*.java" --include="*.xml" --include="*.smali" -n | head -n 500 >> analysis/report.txt || echo "no appstop grep" >> analysis/report.txt
+          echo "=== GREP makrotv ===" >> analysis/report.txt
+          grep -r "makrotv" analysis --include="*.java" --include="*.xml" -n | head -n 500 >> analysis/report.txt || true
+          echo "=== GREP 135.148 ===" >> analysis/report.txt
+          grep -R "135.148\|51.75" analysis --include="*.java" -n | head -n 200 >> analysis/report.txt || true
+          echo "=== GREP BASE_URL ===" >> analysis/report.txt
+          grep -R "BASE_URL\|baseUrl\|server_url\|SERVER_URL" analysis --include="*.java" -n | head -n 500 >> analysis/report.txt || true
+          echo "=== Package list ===" >> analysis/report.txt
+          ls -R analysis/jadx/sources 2>&1 | head -n 1000 >> analysis/report.txt || ls -R analysis/jadx | head -n 1000 >> analysis/report.txt || true
+          echo "=== Manifest ===" >> analysis/report.txt
+          cat analysis/apktool/AndroidManifest.xml 2>&1 | head -n 1000 >> analysis/report.txt || true
+          echo "=== Strings http ===" >> analysis/report.txt
+          strings makrotv.apk | grep -E "http" | head -n 200 >> analysis/report.txt || true
+          cat analysis/report.txt
+          # Also extract specific files
+          find analysis/jadx -name "*.java" | xargs grep -l "appstop\|ApiService\|Retrofit\|player_api" 2>/dev/null | head -n 20
+          for f in $(find analysis/jadx -name "*.java" | xargs grep -l "appstop\|ApiService\|Retrofit" 2>/dev/null | head -n 10); do
+            echo "===== FILE $f =====" >> analysis/report.txt
+            cat "$f" >> analysis/report.txt
+            echo "" >> analysis/report.txt
+          done
+          cat analysis/report.txt
+      - name: Commit APK and Report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add makrotv.apk apk/makrotv.apk || git add -f makrotv.apk
-          git commit -m "Add MakroTV APK (63MB) from catbox" || echo "nothing to commit"
+          git add makrotv.apk apk/makrotv.apk analysis/report.txt || true
+          git status
+          git diff --cached --stat
+          git commit -m "Add APK analysis report" || echo "nothing to commit"
           git push origin arena/01a0d735-makrotv
