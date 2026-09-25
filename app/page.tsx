@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Tv, Shield, Zap, Users, Server, Smartphone, Download, CheckCircle, ArrowRight, ExternalLink } from "lucide-react";
+import { Tv, Shield, Zap, Server, Smartphone, Download, CheckCircle, ArrowRight, ExternalLink } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -35,7 +35,7 @@ export default function HomePage() {
               Seu IPTV, <span className="bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">seu controle.</span>
             </h1>
             <p className="text-white/60 mt-4 text-lg leading-relaxed">
-              Painel administrativo completo para o MakroTV. Gerencie clientes, senhas, servidores DNS e validade — sem depender de painéis de terceiros. API própria, hospedada na Vercel.
+              Gerencie banners e DNS/URL no painel do MakroTV — sem depender de painéis de terceiros. API própria, hospedada na Vercel.
             </p>
             <div className="flex flex-wrap gap-3 mt-8">
               <Link href="/api/apk/download" className="px-6 py-3 rounded-full bg-red-600 hover:bg-red-700 font-bold flex items-center gap-2 transition shadow-lg shadow-red-600/20">
@@ -49,7 +49,7 @@ export default function HomePage() {
               </Link>
             </div>
             <p className="text-xs text-white/40 mt-3 flex items-center gap-2">
-              <CheckCircle className="w-3 h-3 text-green-500" /> APK já apontado para <span className="font-mono text-white/70">https://makrotv.vercel.app</span> • 60 MB • Android 5.0+
+              <CheckCircle className="w-3 h-3 text-green-500" /> APK já apontado para <span className="font-mono text-white/70">https://makrotv.vercel.app</span> • 62 MB • Android 5.0+
             </p>
             <div className="flex items-center gap-6 mt-6 text-sm text-white/50">
               <span className="flex items-center gap-2"><Zap className="w-4 h-4 text-yellow-500" /> Resposta &lt; 100ms</span>
@@ -73,12 +73,12 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="grid grid-cols-3 gap-3">
                   <div className="bg-[#262626] rounded-2xl p-4 border border-white/5">
-                    <div className="text-2xl font-black">847</div>
-                    <div className="text-xs text-white/50">Clientes Ativos</div>
+                    <div className="text-2xl font-black">—</div>
+                    <div className="text-xs text-white/50">Banners Ativos</div>
                   </div>
                   <div className="bg-[#262626] rounded-2xl p-4 border border-white/5">
                     <div className="text-2xl font-black">12</div>
-                    <div className="text-xs text-white/50">Servidores</div>
+                    <div className="text-xs text-white/50">DNS / URLs</div>
                   </div>
                   <div className="bg-gradient-to-br from-red-600 to-red-700 rounded-2xl p-4 text-white">
                     <div className="text-2xl font-black">99.8%</div>
@@ -86,11 +86,11 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="bg-[#262626] rounded-2xl p-4 border border-white/5">
-                  <div className="text-sm font-semibold flex items-center gap-2"><Users className="w-4 h-4" /> Últimos clientes</div>
+                  <div className="text-sm font-semibold flex items-center gap-2"><Tv className="w-4 h-4" /> Banners publicados</div>
                   <div className="mt-3 space-y-2 text-sm">
-                    <div className="flex justify-between items-center bg-[#1a1a1a] rounded-xl px-3 py-2 border border-white/5"><span>demo</span><span className="text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/20">Ativo</span></div>
-                    <div className="flex justify-between items-center bg-[#1a1a1a] rounded-xl px-3 py-2 border border-white/5"><span>cliente72</span><span className="text-xs px-2 py-1 rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/20">Expira em 3d</span></div>
-                    <div className="flex justify-between items-center bg-[#1a1a1a] rounded-xl px-3 py-2 border border-white/5"><span>vip_user</span><span className="text-xs px-2 py-1 rounded-full bg-red-500/20 text-red-400 border border-red-500/20">Bloqueado</span></div>
+                    <div className="flex justify-between items-center bg-[#1a1a1a] rounded-xl px-3 py-2 border border-white/5"><span>Banner principal</span><span className="text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/20">Publicado</span></div>
+                    <div className="flex justify-between items-center bg-[#1a1a1a] rounded-xl px-3 py-2 border border-white/5"><span>Oferta especial</span><span className="text-xs px-2 py-1 rounded-full bg-white/10 text-white/60 border border-white/10">Opcional</span></div>
+                    <div className="flex justify-between items-center bg-[#1a1a1a] rounded-xl px-3 py-2 border border-white/5"><span>DNS configurado</span><span className="text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/20">Online</span></div>
                   </div>
                 </div>
                 <Link href="/api/apk/download" className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-red-600 hover:bg-red-700 font-bold text-white transition">
@@ -124,10 +124,10 @@ export default function HomePage() {
               </ul>
               <div className="flex flex-wrap gap-3 mt-6">
                 <a href="/api/apk/download" className="px-7 py-3.5 rounded-full bg-white text-red-700 font-black flex items-center gap-2 hover:bg-white/90 transition shadow-xl">
-                  <Download className="w-5 h-5" /> Baixar APK (60 MB)
+                  <Download className="w-5 h-5" /> Baixar APK (62 MB)
                 </a>
                 <Link href="/login" className="px-6 py-3.5 rounded-full bg-black/20 backdrop-blur hover:bg-black/30 border border-white/20 font-semibold flex items-center gap-2 transition">
-                  Gerenciar clientes <ArrowRight className="w-4 h-4" />
+                  Gerenciar banners <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
               <p className="text-xs text-white/60 mt-3">Versão 7 • brstore.makro.app • Se o download não iniciar, <a href="/api/apk/info" target="_blank" className="underline hover:text-white">ver status</a></p>
@@ -137,7 +137,7 @@ export default function HomePage() {
                 <div className="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center font-black text-xl">M</div>
                 <div>
                   <div className="font-black">MakroTV</div>
-                  <div className="text-xs text-black/50">v7 • Patcheado • 60.24 MB</div>
+                  <div className="text-xs text-black/50">v7 • Patcheado • 62 MB</div>
                 </div>
                 <span className="ml-auto text-xs px-2.5 py-1 rounded-full bg-green-500 text-white font-bold">✓ ATIVO</span>
               </div>
@@ -172,8 +172,8 @@ export default function HomePage() {
       {/* Features */}
       <section className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid md:grid-cols-3 gap-6">
-          <Feature icon={<Users className="w-6 h-6" />} title="Gestão de Clientes" desc="Crie logins individuais, defina validade, bloqueie e edite com 1 clique. Histórico completo e busca instantânea." />
-          <Feature icon={<Server className="w-6 h-6" />} title="DNS Dinâmico" desc="Altere o endereço do servidor sem recompilar o APK. Cada cliente pode ter seu próprio servidor vinculado." />
+          <Feature icon={<Tv className="w-6 h-6" />} title="Banners do aplicativo" desc="Cadastre imagens, links e ordem de exibição. Publique ou pause cada banner sem recompilar o APK." />
+          <Feature icon={<Server className="w-6 h-6" />} title="DNS / URL dinâmico" desc="Altere o endereço do servidor sem recompilar o APK. A configuração ativa é entregue pela API própria." />
           <Feature icon={<Tv className="w-6 h-6" />} title="API Xtream Compatível" desc="Autenticação segura, validação de expiração e compatibilidade total com player_api.php do app original." />
         </div>
       </section>

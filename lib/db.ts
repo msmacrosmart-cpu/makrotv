@@ -30,6 +30,17 @@ export interface Client {
   updatedAt: string;
 }
 
+export interface Banner {
+  id: string;
+  title: string;
+  imageUrl: string;
+  linkUrl?: string;
+  active: boolean;
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Admin {
   id: string;
   username: string;
@@ -39,6 +50,7 @@ export interface Admin {
 interface DB {
   servers: Server[];
   clients: Client[];
+  banners: Banner[];
   admins: Admin[];
   meta: { version: number };
 }
@@ -86,6 +98,8 @@ function ensureDefaultDB(): DB {
         updatedAt: now,
       },
     ],
+    // Banners are intentionally empty by default; add the images from the panel.
+    banners: [],
     admins: [
       {
         id: "adm_default",
@@ -97,19 +111,29 @@ function ensureDefaultDB(): DB {
   };
 }
 
+function normalizeDB(value: Partial<DB>): DB {
+  return {
+    servers: Array.isArray(value.servers) ? value.servers : [],
+    clients: Array.isArray(value.clients) ? value.clients : [],
+    banners: Array.isArray(value.banners) ? value.banners : [],
+    admins: Array.isArray(value.admins) ? value.admins : [],
+    meta: value.meta || { version: 1 },
+  };
+}
+
 function readDB(): DB {
   const p = dbPath();
   try {
     if (fs.existsSync(p)) {
       const raw = fs.readFileSync(p, "utf-8");
-      return JSON.parse(raw) as DB;
+      return normalizeDB(JSON.parse(raw));
     }
   } catch {}
   // try local fallback
   try {
     if (fs.existsSync(LOCAL_DB)) {
       const raw = fs.readFileSync(LOCAL_DB, "utf-8");
-      const db = JSON.parse(raw) as DB;
+      const db = normalizeDB(JSON.parse(raw));
       // copy to tmp for next reads
       try {
         fs.writeFileSync(p, JSON.stringify(db, null, 2));
@@ -198,6 +222,64 @@ export function deleteServer(id: string): boolean {
   db.clients.forEach((c) => {
     if (c.serverId === id) c.serverId = null;
   });
+  saveDB(db);
+  return true;
+}
+
+// Banners
+export function listBanners(): Banner[] {
+  return getDB().banners.slice().sort((a, b) => a.order - b.order || a.createdAt.localeCompare(b.createdAt));
+}
+
+export function listActiveBanners(): Banner[] {
+  return listBanners().filter((banner) => banner.active);
+}
+
+export function getBanner(id: string): Banner | undefined {
+  return getDB().banners.find((banner) => banner.id === id);
+}
+
+export function createBanner(data: { title: string; imageUrl: string; linkUrl?: string; active?: boolean; order?: number }): Banner {
+  const db = getDB();
+  const now = new Date().toISOString();
+  const banner: Banner = {
+    id: generateId("banner"),
+    title: data.title.trim(),
+    imageUrl: data.imageUrl.trim(),
+    linkUrl: data.linkUrl?.trim() || "",
+    active: data.active !== false,
+    order: Number.isFinite(data.order) ? Number(data.order) : db.banners.length,
+    createdAt: now,
+    updatedAt: now,
+  };
+  db.banners.push(banner);
+  saveDB(db);
+  return banner;
+}
+
+export function updateBanner(id: string, data: Partial<Omit<Banner, "id" | "createdAt">>): Banner | null {
+  const db = getDB();
+  const idx = db.banners.findIndex((banner) => banner.id === id);
+  if (idx === -1) return null;
+  const current = db.banners[idx];
+  db.banners[idx] = {
+    ...current,
+    ...data,
+    title: data.title === undefined ? current.title : data.title.trim(),
+    imageUrl: data.imageUrl === undefined ? current.imageUrl : data.imageUrl.trim(),
+    linkUrl: data.linkUrl === undefined ? current.linkUrl || "" : data.linkUrl.trim(),
+    order: data.order === undefined ? current.order : Number(data.order),
+    updatedAt: new Date().toISOString(),
+  };
+  saveDB(db);
+  return db.banners[idx];
+}
+
+export function deleteBanner(id: string): boolean {
+  const db = getDB();
+  const idx = db.banners.findIndex((banner) => banner.id === id);
+  if (idx === -1) return false;
+  db.banners.splice(idx, 1);
   saveDB(db);
   return true;
 }
@@ -302,6 +384,8 @@ export function dbHealth() {
   return {
     servers: db.servers.length,
     clients: db.clients.length,
+    banners: db.banners.length,
+    activeBanners: db.banners.filter((banner) => banner.active).length,
     admins: db.admins.length,
     path: dbPath(),
     vercel: !!process.env.VERCEL,

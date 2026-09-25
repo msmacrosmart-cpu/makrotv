@@ -3,6 +3,7 @@ import { listActiveBanners } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
+/** Public payload consumed by the original MakroTV app and useful for banner clients. */
 export async function GET() {
   const banners = listActiveBanners();
   return NextResponse.json({
