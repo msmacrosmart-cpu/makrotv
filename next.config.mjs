@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  trailingSlash: false,
   async rewrites() {
     return [
-      { source: "/player_api.php", destination: "/api/player" },
       { source: "/makrotv/api/:path*", destination: "/api/makrotv/:path*" },
     ];
   },
