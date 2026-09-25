@@ -88,7 +88,7 @@ jobs:
           git checkout -- apk-patched/makrotv-patched.apk public/makrotv-patched.apk || true
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add patch-apk.log
+          git add -f patch-apk.log
           git commit -m "ci: publish temporary APK rebuild diagnostic"
           git push origin "HEAD:${GITHUB_REF_NAME}"
           exit 1
