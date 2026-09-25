@@ -1,0 +1,572 @@
+package q;
+
+/* loaded from: classes2.dex */
+public final class n<R, T> {
+
+    /* renamed from: m, reason: collision with root package name */
+    public static final java.util.regex.Pattern f11197m = java.util.regex.Pattern.compile("\\{([a-zA-Z][a-zA-Z0-9_-]*)\\}");
+
+    /* renamed from: n, reason: collision with root package name */
+    public static final java.util.regex.Pattern f11198n = java.util.regex.Pattern.compile("[a-zA-Z][a-zA-Z0-9_-]*");
+    public final m.e.a a;
+    public final q.c<R, T> b;
+    public final m.t c;
+
+    /* renamed from: d, reason: collision with root package name */
+    public final q.e<m.d0, R> f11199d;
+
+    /* renamed from: e, reason: collision with root package name */
+    public final java.lang.String f11200e;
+
+    /* renamed from: f, reason: collision with root package name */
+    public final java.lang.String f11201f;
+
+    /* renamed from: g, reason: collision with root package name */
+    public final m.s f11202g;
+
+    /* renamed from: h, reason: collision with root package name */
+    public final m.v f11203h;
+
+    /* renamed from: i, reason: collision with root package name */
+    public final boolean f11204i;
+
+    /* renamed from: j, reason: collision with root package name */
+    public final boolean f11205j;
+
+    /* renamed from: k, reason: collision with root package name */
+    public final boolean f11206k;
+
+    /* renamed from: l, reason: collision with root package name */
+    public final q.i<?>[] f11207l;
+
+    /* loaded from: classes2.dex */
+    public static final class a<T, R> {
+        public final q.m a;
+        public final java.lang.reflect.Method b;
+        public final java.lang.annotation.Annotation[] c;
+
+        /* renamed from: d, reason: collision with root package name */
+        public final java.lang.annotation.Annotation[][] f11208d;
+
+        /* renamed from: e, reason: collision with root package name */
+        public final java.lang.reflect.Type[] f11209e;
+
+        /* renamed from: f, reason: collision with root package name */
+        public java.lang.reflect.Type f11210f;
+
+        /* renamed from: g, reason: collision with root package name */
+        public boolean f11211g;
+
+        /* renamed from: h, reason: collision with root package name */
+        public boolean f11212h;
+
+        /* renamed from: i, reason: collision with root package name */
+        public boolean f11213i;
+
+        /* renamed from: j, reason: collision with root package name */
+        public boolean f11214j;
+
+        /* renamed from: k, reason: collision with root package name */
+        public boolean f11215k;
+
+        /* renamed from: l, reason: collision with root package name */
+        public boolean f11216l;
+
+        /* renamed from: m, reason: collision with root package name */
+        public java.lang.String f11217m;
+
+        /* renamed from: n, reason: collision with root package name */
+        public boolean f11218n;
+
+        /* renamed from: o, reason: collision with root package name */
+        public boolean f11219o;
+
+        /* renamed from: p, reason: collision with root package name */
+        public boolean f11220p;
+
+        /* renamed from: q, reason: collision with root package name */
+        public java.lang.String f11221q;
+        public m.s r;
+        public m.v s;
+        public java.util.Set<java.lang.String> t;
+        public q.i<?>[] u;
+        public q.e<m.d0, T> v;
+        public q.c<T, R> w;
+
+        public a(q.m mVar, java.lang.reflect.Method method) {
+            this.a = mVar;
+            this.b = method;
+            this.c = method.getAnnotations();
+            this.f11209e = method.getGenericParameterTypes();
+            this.f11208d = method.getParameterAnnotations();
+        }
+
+        public q.n a() {
+            q.c<T, R> b = b();
+            this.w = b;
+            java.lang.reflect.Type a = b.a();
+            this.f11210f = a;
+            if (a == q.l.class || a == m.c0.class) {
+                throw d("'" + q.o.j(this.f11210f).getName() + "' is not a valid response body type. Did you mean ResponseBody?", new java.lang.Object[0]);
+            }
+            this.v = c();
+            for (java.lang.annotation.Annotation annotation : this.c) {
+                j(annotation);
+            }
+            if (this.f11217m == null) {
+                throw d("HTTP method annotation is required (e.g., @GET, @POST, etc.).", new java.lang.Object[0]);
+            }
+            if (!this.f11218n) {
+                if (this.f11220p) {
+                    throw d("Multipart can only be specified on HTTP methods with request body (e.g., @POST).", new java.lang.Object[0]);
+                }
+                if (this.f11219o) {
+                    throw d("FormUrlEncoded can only be specified on HTTP methods with request body (e.g., @POST).", new java.lang.Object[0]);
+                }
+            }
+            int length = this.f11208d.length;
+            this.u = new q.i[length];
+            for (int i2 = 0; i2 < length; i2++) {
+                java.lang.reflect.Type type = this.f11209e[i2];
+                if (q.o.l(type)) {
+                    throw f(i2, "Parameter type must not include a type variable or wildcard: %s", type);
+                }
+                java.lang.annotation.Annotation[] annotationArr = this.f11208d[i2];
+                if (annotationArr == null) {
+                    throw f(i2, "No Retrofit annotation found.", new java.lang.Object[0]);
+                }
+                this.u[i2] = k(i2, type, annotationArr);
+            }
+            if (this.f11221q == null && !this.f11216l) {
+                throw d("Missing either @%s URL or @Url parameter.", this.f11217m);
+            }
+            if (!this.f11219o && !this.f11220p && !this.f11218n && this.f11213i) {
+                throw d("Non-body HTTP method cannot contain @Body.", new java.lang.Object[0]);
+            }
+            if (this.f11219o && !this.f11211g) {
+                throw d("Form-encoded method must contain at least one @Field.", new java.lang.Object[0]);
+            }
+            if (!this.f11220p || this.f11212h) {
+                return new q.n(this);
+            }
+            throw d("Multipart method must contain at least one @Part.", new java.lang.Object[0]);
+        }
+
+        public final q.c<T, R> b() {
+            java.lang.reflect.Type genericReturnType = this.b.getGenericReturnType();
+            if (q.o.l(genericReturnType)) {
+                throw d("Method return type must not include a type variable or wildcard: %s", genericReturnType);
+            }
+            if (genericReturnType == java.lang.Void.TYPE) {
+                throw d("Service methods cannot return void.", new java.lang.Object[0]);
+            }
+            try {
+                return (q.c<T, R>) this.a.b(genericReturnType, this.b.getAnnotations());
+            } catch (java.lang.RuntimeException e2) {
+                throw e(e2, "Unable to create call adapter for %s", genericReturnType);
+            }
+        }
+
+        public final q.e<m.d0, T> c() {
+            try {
+                return this.a.k(this.f11210f, this.b.getAnnotations());
+            } catch (java.lang.RuntimeException e2) {
+                throw e(e2, "Unable to create converter for %s", this.f11210f);
+            }
+        }
+
+        public final java.lang.RuntimeException d(java.lang.String str, java.lang.Object... objArr) {
+            return e(null, str, objArr);
+        }
+
+        public final java.lang.RuntimeException e(java.lang.Throwable th, java.lang.String str, java.lang.Object... objArr) {
+            return new java.lang.IllegalArgumentException(java.lang.String.format(str, objArr) + "\n    for method " + this.b.getDeclaringClass().getSimpleName() + "." + this.b.getName(), th);
+        }
+
+        public final java.lang.RuntimeException f(int i2, java.lang.String str, java.lang.Object... objArr) {
+            return d(str + " (parameter #" + (i2 + 1) + ")", objArr);
+        }
+
+        public final java.lang.RuntimeException g(java.lang.Throwable th, int i2, java.lang.String str, java.lang.Object... objArr) {
+            return e(th, str + " (parameter #" + (i2 + 1) + ")", objArr);
+        }
+
+        public final m.s h(java.lang.String[] strArr) {
+            m.s.a aVar = new m.s.a();
+            for (java.lang.String str : strArr) {
+                int indexOf = str.indexOf(58);
+                if (indexOf == -1 || indexOf == 0 || indexOf == str.length() - 1) {
+                    throw d("@Headers value must be in the form \"Name: Value\". Found: \"%s\"", str);
+                }
+                java.lang.String substring = str.substring(0, indexOf);
+                java.lang.String trim = str.substring(indexOf + 1).trim();
+                if (org.jsoup.helper.HttpConnection.CONTENT_TYPE.equalsIgnoreCase(substring)) {
+                    m.v c = m.v.c(trim);
+                    if (c == null) {
+                        throw d("Malformed content type: %s", trim);
+                    }
+                    this.s = c;
+                } else {
+                    aVar.a(substring, trim);
+                }
+            }
+            return aVar.d();
+        }
+
+        public final void i(java.lang.String str, java.lang.String str2, boolean z) {
+            java.lang.String str3 = this.f11217m;
+            if (str3 != null) {
+                throw d("Only one HTTP method is allowed. Found: %s and %s.", str3, str);
+            }
+            this.f11217m = str;
+            this.f11218n = z;
+            if (str2.isEmpty()) {
+                return;
+            }
+            int indexOf = str2.indexOf(63);
+            if (indexOf != -1 && indexOf < str2.length() - 1) {
+                java.lang.String substring = str2.substring(indexOf + 1);
+                if (q.n.f11197m.matcher(substring).find()) {
+                    throw d("URL query string \"%s\" must not have replace block. For dynamic query parameters use @Query.", substring);
+                }
+            }
+            this.f11221q = str2;
+            this.t = q.n.b(str2);
+        }
+
+        public final void j(java.lang.annotation.Annotation annotation) {
+            java.lang.String value;
+            java.lang.String str;
+            java.lang.String value2;
+            java.lang.String str2;
+            if (annotation instanceof q.q.b) {
+                value = ((q.q.b) annotation).value();
+                str = "DELETE";
+            } else {
+                if (!(annotation instanceof q.q.f)) {
+                    if (annotation instanceof q.q.g) {
+                        i("HEAD", ((q.q.g) annotation).value(), false);
+                        if (!java.lang.Void.class.equals(this.f11210f)) {
+                            throw d("HEAD method must use Void as response type.", new java.lang.Object[0]);
+                        }
+                        return;
+                    }
+                    if (annotation instanceof q.q.l) {
+                        value2 = ((q.q.l) annotation).value();
+                        str2 = "PATCH";
+                    } else if (annotation instanceof q.q.m) {
+                        value2 = ((q.q.m) annotation).value();
+                        str2 = "POST";
+                    } else if (annotation instanceof q.q.n) {
+                        value2 = ((q.q.n) annotation).value();
+                        str2 = "PUT";
+                    } else {
+                        if (!(annotation instanceof q.q.k)) {
+                            if (annotation instanceof q.q.h) {
+                                q.q.h hVar = (q.q.h) annotation;
+                                i(hVar.method(), hVar.path(), hVar.hasBody());
+                                return;
+                            }
+                            if (annotation instanceof q.q.j) {
+                                java.lang.String[] value3 = ((q.q.j) annotation).value();
+                                if (value3.length == 0) {
+                                    throw d("@Headers annotation is empty.", new java.lang.Object[0]);
+                                }
+                                this.r = h(value3);
+                                return;
+                            }
+                            if (annotation instanceof q.q.e) {
+                                if (this.f11220p) {
+                                    throw d("Only one encoding annotation is allowed.", new java.lang.Object[0]);
+                                }
+                                this.f11219o = true;
+                                return;
+                            }
+                            return;
+                        }
+                        value = ((q.q.k) annotation).value();
+                        str = "OPTIONS";
+                    }
+                    i(str2, value2, true);
+                    return;
+                }
+                value = ((q.q.f) annotation).value();
+                str = "GET";
+            }
+            i(str, value, false);
+        }
+
+        public final q.i<?> k(int i2, java.lang.reflect.Type type, java.lang.annotation.Annotation[] annotationArr) {
+            q.i<?> iVar = null;
+            for (java.lang.annotation.Annotation annotation : annotationArr) {
+                q.i<?> l2 = l(i2, type, annotationArr, annotation);
+                if (l2 != null) {
+                    if (iVar != null) {
+                        throw f(i2, "Multiple Retrofit annotations found, only one allowed.", new java.lang.Object[0]);
+                    }
+                    iVar = l2;
+                }
+            }
+            if (iVar != null) {
+                return iVar;
+            }
+            throw f(i2, "No Retrofit annotation found.", new java.lang.Object[0]);
+        }
+
+        public final q.i<?> l(int i2, java.lang.reflect.Type type, java.lang.annotation.Annotation[] annotationArr, java.lang.annotation.Annotation annotation) {
+            if (annotation instanceof q.q.q) {
+                if (this.f11215k) {
+                    throw f(i2, "A @Path parameter must not come after a @Query.", new java.lang.Object[0]);
+                }
+                if (this.f11216l) {
+                    throw f(i2, "@Path parameters may not be used with @Url.", new java.lang.Object[0]);
+                }
+                if (this.f11221q == null) {
+                    throw f(i2, "@Path can only be used with relative url on @%s", this.f11217m);
+                }
+                this.f11214j = true;
+                q.q.q qVar = (q.q.q) annotation;
+                java.lang.String value = qVar.value();
+                m(i2, value);
+                return new q.i.C0309i(value, this.a.l(type, annotationArr), qVar.encoded());
+            }
+            if (annotation instanceof q.q.r) {
+                q.q.r rVar = (q.q.r) annotation;
+                java.lang.String value2 = rVar.value();
+                boolean encoded = rVar.encoded();
+                java.lang.Class<?> j2 = q.o.j(type);
+                this.f11215k = true;
+                if (!java.lang.Iterable.class.isAssignableFrom(j2)) {
+                    return j2.isArray() ? new q.i.j(value2, this.a.l(q.n.a(j2.getComponentType()), annotationArr), encoded).b() : new q.i.j(value2, this.a.l(type, annotationArr), encoded);
+                }
+                if (type instanceof java.lang.reflect.ParameterizedType) {
+                    return new q.i.j(value2, this.a.l(q.o.i(0, (java.lang.reflect.ParameterizedType) type), annotationArr), encoded).c();
+                }
+                throw f(i2, j2.getSimpleName() + " must include generic type (e.g., " + j2.getSimpleName() + "<String>)", new java.lang.Object[0]);
+            }
+            if (annotation instanceof q.q.t) {
+                boolean encoded2 = ((q.q.t) annotation).encoded();
+                java.lang.Class<?> j3 = q.o.j(type);
+                this.f11215k = true;
+                if (!java.lang.Iterable.class.isAssignableFrom(j3)) {
+                    return j3.isArray() ? new q.i.l(this.a.l(q.n.a(j3.getComponentType()), annotationArr), encoded2).b() : new q.i.l(this.a.l(type, annotationArr), encoded2);
+                }
+                if (type instanceof java.lang.reflect.ParameterizedType) {
+                    return new q.i.l(this.a.l(q.o.i(0, (java.lang.reflect.ParameterizedType) type), annotationArr), encoded2).c();
+                }
+                throw f(i2, j3.getSimpleName() + " must include generic type (e.g., " + j3.getSimpleName() + "<String>)", new java.lang.Object[0]);
+            }
+            if (annotation instanceof q.q.s) {
+                java.lang.Class<?> j4 = q.o.j(type);
+                if (!java.util.Map.class.isAssignableFrom(j4)) {
+                    throw f(i2, "@QueryMap parameter type must be Map.", new java.lang.Object[0]);
+                }
+                java.lang.reflect.Type k2 = q.o.k(type, j4, java.util.Map.class);
+                if (!(k2 instanceof java.lang.reflect.ParameterizedType)) {
+                    throw f(i2, "Map must include generic types (e.g., Map<String, String>)", new java.lang.Object[0]);
+                }
+                java.lang.reflect.ParameterizedType parameterizedType = (java.lang.reflect.ParameterizedType) k2;
+                java.lang.reflect.Type i3 = q.o.i(0, parameterizedType);
+                if (java.lang.String.class == i3) {
+                    return new q.i.k(this.a.l(q.o.i(1, parameterizedType), annotationArr), ((q.q.s) annotation).encoded());
+                }
+                throw f(i2, "@QueryMap keys must be of type String: " + i3, new java.lang.Object[0]);
+            }
+            if (annotation instanceof q.q.i) {
+                java.lang.String value3 = ((q.q.i) annotation).value();
+                java.lang.Class<?> j5 = q.o.j(type);
+                if (!java.lang.Iterable.class.isAssignableFrom(j5)) {
+                    return j5.isArray() ? new q.i.f(value3, this.a.l(q.n.a(j5.getComponentType()), annotationArr)).b() : new q.i.f(value3, this.a.l(type, annotationArr));
+                }
+                if (type instanceof java.lang.reflect.ParameterizedType) {
+                    return new q.i.f(value3, this.a.l(q.o.i(0, (java.lang.reflect.ParameterizedType) type), annotationArr)).c();
+                }
+                throw f(i2, j5.getSimpleName() + " must include generic type (e.g., " + j5.getSimpleName() + "<String>)", new java.lang.Object[0]);
+            }
+            if (annotation instanceof q.q.c) {
+                if (!this.f11219o) {
+                    throw f(i2, "@Field parameters can only be used with form encoding.", new java.lang.Object[0]);
+                }
+                q.q.c cVar = (q.q.c) annotation;
+                java.lang.String value4 = cVar.value();
+                boolean encoded3 = cVar.encoded();
+                this.f11211g = true;
+                java.lang.Class<?> j6 = q.o.j(type);
+                if (!java.lang.Iterable.class.isAssignableFrom(j6)) {
+                    return j6.isArray() ? new q.i.d(value4, this.a.l(q.n.a(j6.getComponentType()), annotationArr), encoded3).b() : new q.i.d(value4, this.a.l(type, annotationArr), encoded3);
+                }
+                if (type instanceof java.lang.reflect.ParameterizedType) {
+                    return new q.i.d(value4, this.a.l(q.o.i(0, (java.lang.reflect.ParameterizedType) type), annotationArr), encoded3).c();
+                }
+                throw f(i2, j6.getSimpleName() + " must include generic type (e.g., " + j6.getSimpleName() + "<String>)", new java.lang.Object[0]);
+            }
+            if (annotation instanceof q.q.d) {
+                if (!this.f11219o) {
+                    throw f(i2, "@FieldMap parameters can only be used with form encoding.", new java.lang.Object[0]);
+                }
+                java.lang.Class<?> j7 = q.o.j(type);
+                if (!java.util.Map.class.isAssignableFrom(j7)) {
+                    throw f(i2, "@FieldMap parameter type must be Map.", new java.lang.Object[0]);
+                }
+                java.lang.reflect.Type k3 = q.o.k(type, j7, java.util.Map.class);
+                if (!(k3 instanceof java.lang.reflect.ParameterizedType)) {
+                    throw f(i2, "Map must include generic types (e.g., Map<String, String>)", new java.lang.Object[0]);
+                }
+                java.lang.reflect.ParameterizedType parameterizedType2 = (java.lang.reflect.ParameterizedType) k3;
+                java.lang.reflect.Type i4 = q.o.i(0, parameterizedType2);
+                if (java.lang.String.class == i4) {
+                    q.e<T, java.lang.String> l2 = this.a.l(q.o.i(1, parameterizedType2), annotationArr);
+                    this.f11211g = true;
+                    return new q.i.e(l2, ((q.q.d) annotation).encoded());
+                }
+                throw f(i2, "@FieldMap keys must be of type String: " + i4, new java.lang.Object[0]);
+            }
+            if (!(annotation instanceof q.q.o)) {
+                if (!(annotation instanceof q.q.p)) {
+                    if (!(annotation instanceof q.q.a)) {
+                        return null;
+                    }
+                    if (this.f11219o || this.f11220p) {
+                        throw f(i2, "@Body parameters cannot be used with form or multi-part encoding.", new java.lang.Object[0]);
+                    }
+                    if (this.f11213i) {
+                        throw f(i2, "Multiple @Body method annotations found.", new java.lang.Object[0]);
+                    }
+                    try {
+                        q.e<T, m.b0> j8 = this.a.j(type, annotationArr, this.c);
+                        this.f11213i = true;
+                        return new q.i.c(j8);
+                    } catch (java.lang.RuntimeException e2) {
+                        throw g(e2, i2, "Unable to create @Body converter for %s", type);
+                    }
+                }
+                if (!this.f11220p) {
+                    throw f(i2, "@PartMap parameters can only be used with multipart encoding.", new java.lang.Object[0]);
+                }
+                this.f11212h = true;
+                java.lang.Class<?> j9 = q.o.j(type);
+                if (!java.util.Map.class.isAssignableFrom(j9)) {
+                    throw f(i2, "@PartMap parameter type must be Map.", new java.lang.Object[0]);
+                }
+                java.lang.reflect.Type k4 = q.o.k(type, j9, java.util.Map.class);
+                if (!(k4 instanceof java.lang.reflect.ParameterizedType)) {
+                    throw f(i2, "Map must include generic types (e.g., Map<String, String>)", new java.lang.Object[0]);
+                }
+                java.lang.reflect.ParameterizedType parameterizedType3 = (java.lang.reflect.ParameterizedType) k4;
+                java.lang.reflect.Type i5 = q.o.i(0, parameterizedType3);
+                if (java.lang.String.class == i5) {
+                    java.lang.reflect.Type i6 = q.o.i(1, parameterizedType3);
+                    if (m.w.b.class.isAssignableFrom(q.o.j(i6))) {
+                        throw f(i2, "@PartMap values cannot be MultipartBody.Part. Use @Part List<Part> or a different value type instead.", new java.lang.Object[0]);
+                    }
+                    return new q.i.h(this.a.j(i6, annotationArr, this.c), ((q.q.p) annotation).encoding());
+                }
+                throw f(i2, "@PartMap keys must be of type String: " + i5, new java.lang.Object[0]);
+            }
+            if (!this.f11220p) {
+                throw f(i2, "@Part parameters can only be used with multipart encoding.", new java.lang.Object[0]);
+            }
+            q.q.o oVar = (q.q.o) annotation;
+            this.f11212h = true;
+            java.lang.String value5 = oVar.value();
+            java.lang.Class<?> j10 = q.o.j(type);
+            if (value5.isEmpty()) {
+                if (!java.lang.Iterable.class.isAssignableFrom(j10)) {
+                    if (j10.isArray()) {
+                        if (m.w.b.class.isAssignableFrom(j10.getComponentType())) {
+                            return q.i.m.a.b();
+                        }
+                        throw f(i2, "@Part annotation must supply a name or use MultipartBody.Part parameter type.", new java.lang.Object[0]);
+                    }
+                    if (m.w.b.class.isAssignableFrom(j10)) {
+                        return q.i.m.a;
+                    }
+                    throw f(i2, "@Part annotation must supply a name or use MultipartBody.Part parameter type.", new java.lang.Object[0]);
+                }
+                if (type instanceof java.lang.reflect.ParameterizedType) {
+                    if (m.w.b.class.isAssignableFrom(q.o.j(q.o.i(0, (java.lang.reflect.ParameterizedType) type)))) {
+                        return q.i.m.a.c();
+                    }
+                    throw f(i2, "@Part annotation must supply a name or use MultipartBody.Part parameter type.", new java.lang.Object[0]);
+                }
+                throw f(i2, j10.getSimpleName() + " must include generic type (e.g., " + j10.getSimpleName() + "<String>)", new java.lang.Object[0]);
+            }
+            m.s e3 = m.s.e("Content-Disposition", "form-data; name=\"" + value5 + "\"", "Content-Transfer-Encoding", oVar.encoding());
+            if (!java.lang.Iterable.class.isAssignableFrom(j10)) {
+                if (!j10.isArray()) {
+                    if (m.w.b.class.isAssignableFrom(j10)) {
+                        throw f(i2, "@Part parameters using the MultipartBody.Part must not include a part name in the annotation.", new java.lang.Object[0]);
+                    }
+                    return new q.i.g(e3, this.a.j(type, annotationArr, this.c));
+                }
+                java.lang.Class<?> a = q.n.a(j10.getComponentType());
+                if (m.w.b.class.isAssignableFrom(a)) {
+                    throw f(i2, "@Part parameters using the MultipartBody.Part must not include a part name in the annotation.", new java.lang.Object[0]);
+                }
+                return new q.i.g(e3, this.a.j(a, annotationArr, this.c)).b();
+            }
+            if (type instanceof java.lang.reflect.ParameterizedType) {
+                java.lang.reflect.Type i7 = q.o.i(0, (java.lang.reflect.ParameterizedType) type);
+                if (m.w.b.class.isAssignableFrom(q.o.j(i7))) {
+                    throw f(i2, "@Part parameters using the MultipartBody.Part must not include a part name in the annotation.", new java.lang.Object[0]);
+                }
+                return new q.i.g(e3, this.a.j(i7, annotationArr, this.c)).c();
+            }
+            throw f(i2, j10.getSimpleName() + " must include generic type (e.g., " + j10.getSimpleName() + "<String>)", new java.lang.Object[0]);
+        }
+
+        public final void m(int i2, java.lang.String str) {
+            if (!q.n.f11198n.matcher(str).matches()) {
+                throw f(i2, "@Path parameter name must match %s. Found: %s", q.n.f11197m.pattern(), str);
+            }
+            if (!this.t.contains(str)) {
+                throw f(i2, "URL \"%s\" does not contain \"{%s}\".", this.f11221q, str);
+            }
+        }
+    }
+
+    public n(q.n.a<R, T> aVar) {
+        this.a = aVar.a.c();
+        this.b = aVar.w;
+        this.c = aVar.a.a();
+        this.f11199d = aVar.v;
+        this.f11200e = aVar.f11217m;
+        this.f11201f = aVar.f11221q;
+        this.f11202g = aVar.r;
+        this.f11203h = aVar.s;
+        this.f11204i = aVar.f11218n;
+        this.f11205j = aVar.f11219o;
+        this.f11206k = aVar.f11220p;
+        this.f11207l = aVar.u;
+    }
+
+    public static java.lang.Class<?> a(java.lang.Class<?> cls) {
+        return java.lang.Boolean.TYPE == cls ? java.lang.Boolean.class : java.lang.Byte.TYPE == cls ? java.lang.Byte.class : java.lang.Character.TYPE == cls ? java.lang.Character.class : java.lang.Double.TYPE == cls ? java.lang.Double.class : java.lang.Float.TYPE == cls ? java.lang.Float.class : java.lang.Integer.TYPE == cls ? java.lang.Integer.class : java.lang.Long.TYPE == cls ? java.lang.Long.class : java.lang.Short.TYPE == cls ? java.lang.Short.class : cls;
+    }
+
+    public static java.util.Set<java.lang.String> b(java.lang.String str) {
+        java.util.regex.Matcher matcher = f11197m.matcher(str);
+        java.util.LinkedHashSet linkedHashSet = new java.util.LinkedHashSet();
+        while (matcher.find()) {
+            linkedHashSet.add(matcher.group(1));
+        }
+        return linkedHashSet;
+    }
+
+    public m.a0 c(java.lang.Object... objArr) {
+        q.k kVar = new q.k(this.f11200e, this.c, this.f11201f, this.f11202g, this.f11203h, this.f11204i, this.f11205j, this.f11206k);
+        q.i<?>[] iVarArr = this.f11207l;
+        int length = objArr != null ? objArr.length : 0;
+        if (length == iVarArr.length) {
+            for (int i2 = 0; i2 < length; i2++) {
+                iVarArr[i2].a(kVar, objArr[i2]);
+            }
+            return kVar.g();
+        }
+        throw new java.lang.IllegalArgumentException("Argument count (" + length + ") doesn't match expected count (" + iVarArr.length + ")");
+    }
+
+    public R d(m.d0 d0Var) {
+        return this.f11199d.a(d0Var);
+    }
+}
