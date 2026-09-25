@@ -1,13 +1,13 @@
 # MakroTV — Painel Próprio + API + APK Recuperado
 
-> **Aplicativo Android IPTV de 63 MB (brstore.makro.app) + Infraestrutura completa para substituir o painel suspenso `http://appstop.site/makrotv/api/`**
+> **Aplicativo Android IPTV de 62 MB (brstore.makro.app) + Infraestrutura completa para substituir o painel suspenso `http://appstop.site/makrotv/api/`**
 
 Painel administrativo web responsivo + API própria (Vercel-ready) + APK original preservado e script de patch para nova infraestrutura.
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black)
 ![Vercel](https://img.shields.io/badge/Vercel-ready-black)
 ![API](https://img.shields.io/badge/API-Xtream%20compat-red)
-![APK](https://img.shields.io/badge/APK-60.24MB-orange)
+![APK](https://img.shields.io/badge/APK-62MB-orange)
 
 ---
 
@@ -15,7 +15,7 @@ Painel administrativo web responsivo + API própria (Vercel-ready) + APK origina
 
 | Home | Login | Dashboard |
 |------|-------|-----------|
-| Landing com preview do painel, features e CTA | `admin / admin123` com dicas de teste da API | Visão geral, DNS atual, últimos clientes, gestão |
+| Landing com preview do painel, features e CTA | `admin / admin123` com dicas de teste da API | Banners, DNS / URL e distribuição do APK |
 
 > Acesse localmente em `http://localhost:3000` após `npm run dev` ou na URL da Vercel após deploy.
 
@@ -100,8 +100,8 @@ App inicia
 - `/` — Landing premium (hero, mock dashboard, features)
 - `/login` — Auth admin (`admin/admin123` padrão, env `ADMIN_USERNAME/PASSWORD`)
 - `/dashboard` — Métricas, DNS atual, atividade recente, atalhos
-- `/dashboard/clients` — CRUD clientes: nome, usuário, senha (bcrypt), email, servidor vinculado, status (ativo/bloqueado), validade (date picker), busca instantânea
-- `/dashboard/servers` — CRUD DNS: nome, URL (http://host:port), status ativo/inativo
+- `/dashboard/banners` — CRUD de banners: imagem, título, link, ordem e publicação
+- `/dashboard/dns` — CRUD de DNS / URL: nome, endereço e status ativo/inativo
 
 **Identidade visual:** Fundo `#0a0a0a` + cards `#1a1a1a`/`#262626`, acento `red-600`, bordas `white/10`, gradientes, blur, ícones `lucide-react`. Totalmente responsivo (mobile drawer, grid adaptativo).
 
@@ -125,7 +125,9 @@ App inicia
 | POST | `/api/auth/login` | — | Login admin → set cookie |
 | POST | `/api/auth/logout` | cookie | Logout |
 | GET | `/api/auth/me` | cookie | Quem está logado |
-| GET | `/api/clients` | cookie | Lista clientes (hide hash, add `serverName`, `isExpired`) |
+| GET | `/api/banners` | cookie | Lista banners cadastrados |
+| POST | `/api/banners` | cookie | Cria banner |
+| PUT/DELETE | `/api/banners/[id]` | cookie | Edita ou remove banner |
 | POST | `/api/clients` | cookie | Cria cliente (valida unique username) |
 | PUT | `/api/clients/[id]` | cookie | Edita (senha opcional) |
 | DELETE | `/api/clients/[id]` | cookie | Exclui |
@@ -208,7 +210,7 @@ NEXT_PUBLIC_PANEL_URL=https://makrotv.vercel.app
    curl https://makrotv.vercel.app/api/dns
    curl "https://makrotv.vercel.app/player_api.php?username=demo&password=demo123"
    ```
-5. No painel (`/login` → `admin/admin123`), cadastre seu DNS real em **Servidores DNS** e vincule clientes.
+5. No painel (`/login` → `admin/admin123`), cadastre o DNS real em **DNS / URL** e publique os banners em **Banners**.
 6. **Baixe o APK já pronto no painel:** No header da landing (`/`), no dashboard (`/dashboard`) e no menu lateral há botão **“Baixar APK”** → `https://makrotv.vercel.app/api/apk/download` (redirect para `/makrotv-patched.apk`). Status em `https://makrotv.vercel.app/api/apk/info`. Se o APK ainda não foi gerado, dispare o workflow **Patch APK** no GitHub ou gere localmente: `./scripts/patch-apk.sh https://makrotv.vercel.app` → saída `apk-patched/makrotv-patched.apk` + `public/makrotv-patched.apk` (commitado e servido via CDN).
 
 ### Local
@@ -223,7 +225,7 @@ curl http://localhost:3000/api/dns?u=demo
 
 ### APK original preservado
 
-- `makrotv.apk` (60.24 MB) e `apk/makrotv.apk` — backup antes de qualquer alteração.
+- `makrotv.apk` e `apk/makrotv.apk` — APK original preservado antes da reconstrução.
 - `analysis/` contém jadx/apktool dumps, `probe_result.txt` (prova de suspensão `appstop.site`), `j1.txt` (MD5), `report.txt`, `critical/` etc.
 
 ### Documentação adicional
@@ -259,6 +261,10 @@ IPTV Smarters é player que usa playlists M3U/JSON do usuário. Este projeto nã
 
 ---
 
-**Branch desta entrega:** `arena/01a0d735-makrotv`  
-**Commit base:** `59be76a Initial commit`  
-**APK original:** `https://bit.ly/makrotvfinalv7` → `https://files.catbox.moe/rq155y.apk` (via GitHub Runner, 60.24 MB)
+**Branch desta entrega:** `arena/01a0d775-makrotv`
+**Commit base:** `59be76a Initial commit`
+**APK original:** `https://bit.ly/makrotvfinalv7` → `https://files.catbox.moe/rq155y.apk` (via GitHub Runner)
+
+### Correção de rebuild e painel (setembro de 2026)
+
+O painel atual expõe somente **Banners** e **DNS / URL**. O workflow `Patch APK` reconstrói o aplicativo com `apktool d`, altera o smali, recompila com `apktool b`, executa `zipalign -v 4` antes da assinatura e assina com `apksigner` v1, v2 e v3. O atributo `android:testOnly` é removido durante o decode. O resultado é copiado para `public/makrotv-patched.apk` e entregue por `/api/apk/download`.

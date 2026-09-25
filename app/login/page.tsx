@@ -44,13 +44,13 @@ export default function LoginPage() {
           </div>
           <h1 className="text-4xl font-black text-white mt-14 leading-[0.9]">Bem-vindo de volta.</h1>
           <p className="text-white/80 mt-4 max-w-md leading-relaxed">
-            Acesse o painel administrativo para gerenciar clientes, servidores e a infraestrutura do seu aplicativo Android.
+            Acesse o painel administrativo para gerenciar banners e DNS / URL do seu aplicativo Android.
           </p>
           <div className="grid grid-cols-2 gap-4 mt-10 max-w-md">
-            <MiniStat label="Clientes" value="847+" />
-            <MiniStat label="Uptime" value="99.9%" />
-            <MiniStat label="API" value="<100ms" />
-            <MiniStat label="Segurança" value="bcrypt" />
+            <MiniStat label="Banners" value="∞" />
+            <MiniStat label="DNS / URL" value="ativo" />
+            <MiniStat label="API" value="online" />
+            <MiniStat label="APK" value="v7" />
           </div>
         </div>
         <p className="text-white/60 text-sm">© MakroTV • Painel v2 • brstore.makro.app</p>

@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: arena/01a0d735-makrotv
+          ref: arena/01a0d775-makrotv
       - name: Verify APK
         run: |
           ls -lh makrotv.apk apk/makrotv.apk

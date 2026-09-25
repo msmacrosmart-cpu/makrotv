@@ -1,7 +1,7 @@
 name: CI - MakroTV Panel
 on:
   push:
-    branches: [ "arena/01a0d735-makrotv", "main" ]
+    branches: [ "arena/01a0d775-makrotv", "main" ]
   pull_request:
     branches: [ "main" ]
 

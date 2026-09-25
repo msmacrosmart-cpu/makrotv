@@ -1,0 +1,24 @@
+MakroTV — reconstrução entregue nesta sessão
+
+A sessão anterior informou commits que não estavam neste checkout. A correção foi reconstruída na branch fixa desta sessão:
+
+- painel administrativo reduzido a Banners + DNS / URL;
+- CRUD de banners em /dashboard/banners e API protegida em /api/banners;
+- banners ativos publicados em /makrotv/api/intro;
+- rotas antigas de Clientes e Servidores redirecionam para o painel atual;
+- script de APK corrigido para apktool d -> patch smali -> apktool b -> zipalign 4 -> apksigner v1 + v2 + v3;
+- remoção de android:testOnly durante a reconstrução;
+- workflow configurado para arena/01a0d775-makrotv e para copiar o APK para public/.
+
+APK esperado após o workflow:
+
+  public/makrotv-patched.apk
+  /api/apk/download
+
+O workflow deve registrar o tamanho final e validar:
+
+  apksigner verify --verbose
+  unzip -p public/makrotv-patched.apk classes.dex | strings | grep makrotv.vercel.app
+
+Branch desta sessão: arena/01a0d775-makrotv
+Domínio canônico: https://makrotv.vercel.app

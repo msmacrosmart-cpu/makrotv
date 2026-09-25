@@ -1,3 +1,24 @@
-import { NextRequest, NextResponse } from "next/server";
-export async function GET() { return NextResponse.json({ status: "true", url: "" }); }
-export async function POST() { return NextResponse.json({ status: "true", url: "" }); }
+import { NextResponse } from "next/server";
+import { listActiveBanners } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
+
+export async function GET() {
+  const banners = listActiveBanners();
+  return NextResponse.json({
+    status: "true",
+    url: banners[0]?.imageUrl || "",
+    banners: banners.map((banner) => ({
+      id: banner.id,
+      title: banner.title,
+      image: banner.imageUrl,
+      imageUrl: banner.imageUrl,
+      url: banner.linkUrl || "",
+      link: banner.linkUrl || "",
+    })),
+  });
+}
+
+export async function POST() {
+  return GET();
+}

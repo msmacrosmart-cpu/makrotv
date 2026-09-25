@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "MakroTV - Painel Administrativo",
-  description: "Painel administrativo MakroTV - Gerenciamento de clientes IPTV, servidores e DNS",
+  description: "Painel MakroTV para gerenciamento de banners e DNS / URL do aplicativo",
   icons: {
     icon: "/favicon.ico",
   },

@@ -46,6 +46,7 @@ export async function GET() {
       mtime: stat.mtime.toISOString(),
       package: "brstore.makro.app",
       version: "v7-patched",
+      signing: ["v1", "v2", "v3"],
       instructions: "Baixe via /api/apk/download e instale. Ative 'Fontes desconhecidas' no Android.",
     });
   }
