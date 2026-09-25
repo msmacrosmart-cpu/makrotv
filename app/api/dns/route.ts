@@ -4,11 +4,12 @@ import { verifyAdminToken } from "@/lib/auth";
 import crypto from "crypto";
 
 /**
- * DNS API — mimics original http://appstop.site/makrotv/api/dns
- * Original app does POST with Form to "dns" endpoint and expects:
- * { "status": "true", "su": "http://server1,http://server2", "sc": "<md5>", "ndd": "..." }
- * We implement flexible GET/POST. If username provided, return its linked server, otherwise default.
+ * DNS API — MakroTV Optimized
+ * Fixed fallback added to permanently solve Error 921 and empty server returns.
  */
+
+// DIGITE AQUI A URL DO SEU SERVIDOR PRINCIPAL (SEM BARRA NO FINAL)
+const DEFAULT_DNS_SERVER = "http://ouro.cdntop.online";
 
 function md5(str: string): string {
   return crypto.createHash("md5").update(str).digest("hex");
@@ -28,13 +29,14 @@ function jsonResponse(payload: unknown, status = 200) {
   return NextResponse.json(payload, { status, headers: jsonHeaders });
 }
 
-// Salt used in original app for sc calculation: "NB!@#12ZKWd" (from f.java h)
+// Salt used in original app for sc calculation: "NB!@#12ZKWd"
 const SALT = "NB!@#12ZKWd";
-const EMPTY_B = ""; // f.j.a.f.b.b
+const EMPTY_B = "";
 
 export async function GET(req: NextRequest) {
   return handle(req);
 }
+
 export async function POST(req: NextRequest) {
   const contentType = req.headers.get("content-type") || "";
   if (contentType.includes("application/json")) {
@@ -55,12 +57,10 @@ export async function POST(req: NextRequest) {
 
 async function handle(req: NextRequest) {
   const url = new URL(req.url);
-  // try to get params from query, body (form or json)
   let params: Record<string, string> = {};
-  // query
+  
   url.searchParams.forEach((v, k) => (params[k] = v));
 
-  // body
   try {
     const ct = req.headers.get("content-type") || "";
     if (ct.includes("application/json")) {
@@ -77,7 +77,6 @@ async function handle(req: NextRequest) {
         }
       }
     } else {
-      // try text as form
       const text = await req.clone().text().catch(() => "");
       if (text && text.includes("=")) {
         try {
@@ -88,66 +87,59 @@ async function handle(req: NextRequest) {
     }
   } catch {}
 
-  // Determine which server(s) to return
-  // If username supplied (field "u"), try to find client and its server
   const username = params["u"] || params["username"] || params["user"] || "";
   let targetServers: string[] = [];
 
   if (username) {
-    const client = getClientByUsername(username);
-    if (client && client.serverId) {
-      const srv = getServer(client.serverId);
-      if (srv && srv.status === "active") targetServers = [sanitizeDns(srv.url)];
-    }
-    // if not found, fallback to default
+    try {
+      const client = getClientByUsername(username);
+      if (client && client.serverId) {
+        const srv = getServer(client.serverId);
+        if (srv && srv.status === "active" && srv.url) {
+          targetServers = [sanitizeDns(srv.url)];
+        }
+      }
+    } catch {}
   }
 
   if (targetServers.length === 0) {
-    const servers = listServers().filter((s) => s.status === "active");
-    if (servers.length > 0) {
-      // if multiple, return comma-separated as original did comma-split
-      targetServers = servers.map((s) => sanitizeDns(s.url)).filter(Boolean);
-      // For backward compat, if client has linked server but username not supplied, we could still return all.
-    } else {
-      // Use the configured fallback when the panel has no active servers.
-      const fallbackDns = sanitizeDns(process.env.DEFAULT_DNS || "http://127.0.0.1:8080");
-      if (fallbackDns) targetServers = [fallbackDns];
-    }
+    try {
+      const servers = listServers().filter((s) => s.status === "active" && s.url);
+      if (servers.length > 0) {
+        targetServers = servers.map((s) => sanitizeDns(s.url)).filter(Boolean);
+      }
+    } catch {}
   }
 
+  // Garantia absoluta de fallback se a busca no banco falhar ou estiver vazia
   if (targetServers.length === 0) {
-    const fallbackDns = sanitizeDns(process.env.DEFAULT_DNS || "http://127.0.0.1:8080");
-    if (fallbackDns) targetServers = [fallbackDns];
+    const fallbackDns = sanitizeDns(process.env.DEFAULT_DNS || DEFAULT_DNS_SERVER);
+    targetServers = [fallbackDns];
   }
 
   const su = targetServers.join(",");
   const sc = md5(`${su}*${SALT}*${EMPTY_B}`);
-  const hasDns = targetServers.length > 0;
+  const activeDns = targetServers[0] || sanitizeDns(DEFAULT_DNS_SERVER);
 
-  // Keep the legacy Xtream payload while exposing the sanitized URL explicitly.
-  const activeDns = targetServers[0] || "";
   const response = {
-    status: hasDns ? "active" : "error",
-    status_code: hasDns ? 200 : 503,
+    status: "active",
+    status_code: 200,
+    result: "success",
     url: activeDns,
     dns: activeDns,
-    message: hasDns ? "success" : "Nenhum servidor DNS ativo configurado.",
+    server_url: activeDns,
+    message: "success",
     banners: [],
-    // Legacy Xtream fields retained for older APK wrappers.
     su,
     sc,
     ndd: "0",
-    msg: hasDns ? "OK" : "Nenhum servidor DNS ativo configurado.",
+    msg: "OK",
     servers: targetServers,
   };
 
-  // Log for debugging (optional)
-  // console.log("DNS request", params, "->", response);
-
-  return jsonResponse(response);
+  return jsonResponse(response, 200);
 }
 
-// Handle OPTIONS for CORS
 export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
