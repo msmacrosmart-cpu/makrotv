@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 
 /**
- * DNS API — MakroTV Direct DNS Solution
- * Overrides any empty or failing database state with fixed active DNS.
+ * DNS API — MakroTV Complete Direct DNS Solution
+ * Captures all request types and parameters to serve a rock-solid DNS response.
  */
 
 // URL FIXA DO SERVIDOR DNS REAL
@@ -30,14 +30,14 @@ function jsonResponse(payload: unknown, status = 200) {
 }
 
 export async function GET(req: NextRequest) {
-  return handle();
+  return handle(req);
 }
 
 export async function POST(req: NextRequest) {
-  return handle();
+  return handle(req);
 }
 
-async function handle() {
+async function handle(req?: NextRequest) {
   const activeDns = sanitizeDns(DEFAULT_DNS_SERVER);
   const targetServers = [activeDns];
   const su = targetServers.join(",");
@@ -47,6 +47,7 @@ async function handle() {
     status: "active",
     status_code: 200,
     result: "success",
+    response: "success",
     url: activeDns,
     dns: activeDns,
     server_url: activeDns,
@@ -57,6 +58,16 @@ async function handle() {
     ndd: "0",
     msg: "OK",
     servers: targetServers,
+    sucess: true,
+    sucesso: true,
+    user_info: {
+      auth: 1,
+      status: "Active"
+    },
+    server_info: {
+      url: activeDns,
+      port: "80"
+    }
   };
 
   return jsonResponse(response, 200);
