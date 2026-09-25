@@ -47,7 +47,6 @@ export async function GET() {
       package: "brstore.makro.app",
       version: "v7-patched",
       signing: ["v1", "v2", "v3"],
-      expectedSize: 64983847,
       instructions: "Baixe via /api/apk/download e instale. Ative 'Fontes desconhecidas' no Android.",
     });
   }
