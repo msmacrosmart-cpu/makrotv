@@ -1,22 +1,5 @@
 {
-  "servers": [
-    {
-      "id": "srv_default",
-      "name": "Servidor Principal",
-      "url": "http://seu-servidor-xtream.com:8080",
-      "status": "active",
-      "createdAt": "2026-09-25T06:30:00.000Z",
-      "updatedAt": "2026-09-25T06:30:00.000Z"
-    },
-    {
-      "id": "srv_vip",
-      "name": "Servidor VIP",
-      "url": "http://vip-servidor.com:8080",
-      "status": "active",
-      "createdAt": "2026-09-25T06:32:12.637Z",
-      "updatedAt": "2026-09-25T06:32:12.637Z"
-    }
-  ],
+  "servers": [],
   "clients": [
     {
       "id": "cli_demo",

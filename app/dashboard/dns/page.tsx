@@ -13,11 +13,28 @@ export default function DnsPage() {
   const [msg, setMsg] = useState("");
 
   async function load() {
-    const r = await fetch("/api/servers");
+    const saved = window.localStorage.getItem("dns_servers");
+    let localServers: Srv[] | null = null;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          localServers = parsed;
+          setServers(parsed);
+        }
+      } catch {
+        window.localStorage.removeItem("dns_servers");
+      }
+    }
+
+    const r = await fetch("/api/servers", { cache: "no-store" });
     const data = await r.json();
-    setServers(data.servers || []);
+    const apiServers = Array.isArray(data.servers) ? data.servers : [];
+    const nextServers = apiServers.length > 0 || !localServers ? apiServers : localServers;
+    setServers(nextServers);
+    window.localStorage.setItem("dns_servers", JSON.stringify(nextServers));
   }
-  useEffect(() => { load(); }, []);
+  useEffect(() => { void load(); }, []);
 
   function openCreate() {
     setEditing(null);
@@ -38,13 +55,23 @@ export default function DnsPage() {
     const data = await res.json();
     if (!res.ok) return setMsg(data.error || "Erro");
     setShow(false);
-    load();
+    const updatedServers = editing
+      ? servers.map((server) => server.id === editing.id ? data.server : server)
+      : [...servers, data.server];
+    setServers(updatedServers);
+    window.localStorage.setItem("dns_servers", JSON.stringify(updatedServers));
+    void load();
   }
 
   async function del(id: string) {
     if (!confirm("Excluir esta configuração de DNS?")) return;
     const r = await fetch(`/api/servers/${id}`, { method: "DELETE" });
-    if (r.ok) load();
+    if (r.ok) {
+      const updatedServers = servers.filter((server) => server.id !== id);
+      setServers(updatedServers);
+      window.localStorage.setItem("dns_servers", JSON.stringify(updatedServers));
+      void load();
+    }
   }
 
   return (
