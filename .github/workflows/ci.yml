@@ -1,0 +1,42 @@
+name: CI - MakroTV Panel
+on:
+  push:
+    branches: [ "arena/01a0d735-makrotv", "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Check health endpoint (if needed)
+        run: |
+          echo "Build OK — panel has $(find app -type f | wc -l) app files"
+          echo "APK preserved: $(ls -lh makrotv.apk | awk '{print $9, $5}')"
+          cat vercel.json | head -n 20
+
+  # Optional: patch APK workflow (manual)
+  patch-apk:
+    if: false # manual trigger via workflow_dispatch if needed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install apktool
+        run: |
+          sudo apt-get update && sudo apt-get install -y apktool
+          apktool --version
+      - name: Patch APK (example)
+        run: |
+          chmod +x scripts/patch-apk.sh
+          # Example: patch to placeholder - replace with your Vercel URL
+          # ./scripts/patch-apk.sh https://your-domain.vercel.app
+          echo "Patch script ready - run manually with your domain"

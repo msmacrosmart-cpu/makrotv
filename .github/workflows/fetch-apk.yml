@@ -1,8 +1,6 @@
 name: Fetch APK
 on:
-  push:
-    branches: [ "arena/01a0d735-makrotv" ]
-    paths: [ ".github/workflows/fetch-apk.yml" ]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -14,48 +12,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: arena/01a0d735-makrotv
-          fetch-depth: 0
-      - name: Probe panel API
+      - name: Verify APK
         run: |
-          set -e
-          echo "=== Probing appstop.site ==="
-          cat > /tmp/probe.sh << 'EOS'
-          #!/bin/bash
-          for url in "http://appstop.site/makrotv/api/dns" "http://appstop.site/makrotv/api/" "http://appstop.site/makrotv/" "http://appstop.site/" "https://appstop.site/makrotv/api/dns"; do
-            echo "=== Testing $url ==="
-            curl -s -i "$url" --max-time 10 || echo "curl failed $url"
-            echo ""
-            curl -s -X POST -d "gu=test&k=test&sc=test&u=test&pw=test&r=test&av=1.0&dt=unknown&d=test&do=test" "$url" --max-time 10 -i || echo "post failed"
-            echo "---"
-          done
-          echo "=== DNS lookup ==="
-          getent hosts appstop.site || echo "no hosts"
-          nslookup appstop.site 2>&1 | head -n 20 || echo "nslookup failed"
-          dig appstop.site 2>&1 | head -n 20 || echo "dig failed"
-          echo "=== Check if domain is parked ==="
-          curl -s http://appstop.site --max-time 10 -i | head -n 100 || true
-          EOS
-          chmod +x /tmp/probe.sh
-          bash /tmp/probe.sh | tee analysis/probe_result.txt
-          cat analysis/probe_result.txt
-          # Also extract j1 method source for reference
-          sudo apt-get update -qq && sudo apt-get install -y -qq unzip wget > /dev/null
-          wget -q https://github.com/skylot/jadx/releases/download/v1.5.0/jadx-1.5.0.zip -O /tmp/jadx.zip
-          unzip -q /tmp/jadx.zip -d /tmp/jadx
-          /tmp/jadx/bin/jadx -d /tmp/jadx_out makrotv.apk --no-imports 2>&1 | head -n 20 || true
-          echo "=== j1 method ===" > analysis/j1.txt
-          grep -n "j1\|b0\|sc\|k(" /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java | head -n 100 >> analysis/j1.txt || true
-          grep -n "private.*j1\|String j1\|public.*j1" /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java | head -n 20 >> analysis/j1.txt || true
-          # Try to extract j1 definition with context
-          grep -A 30 "String j1" /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java | head -n 100 >> analysis/j1.txt || true
-          grep -A 30 "j1(" /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java | head -n 200 >> analysis/j1.txt || true
-          cat analysis/j1.txt
-          # Also full Splash h0 with sc handling
-          grep -A 50 "public void h0" /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java | head -n 100 >> analysis/j1.txt || true
-      - name: Commit probe
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add analysis/probe_result.txt analysis/j1.txt || true
-          git commit -m "Probe panel API and j1" || echo "nothing to commit"
-          git push origin arena/01a0d735-makrotv
+          ls -lh makrotv.apk apk/makrotv.apk
+          echo "APK size: $(du -h makrotv.apk | cut -f1)"
+          echo "Package: brstore.makro.app"
+          echo "Original panel: http://appstop.site/makrotv/api/ (suspended)"
+          echo "New panel will be at /api/dns and /makrotv/api/dns"

@@ -1,0 +1,32 @@
+# deps
+node_modules
+.pnp
+.pnp.js
+
+# next
+.next/
+out/
+build/
+dist/
+
+# env
+.env
+.env.local
+.env.production
+
+# DB
+data/db.json.bak
+/tmp
+
+# apk generated
+apk-patched/
+*.keystore
+
+# misc
+.DS_Store
+*.log
+analysis/jadx
+analysis/apktool
+analysis/full_f
+jadx
+apktool.jar
