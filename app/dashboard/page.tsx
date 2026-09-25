@@ -60,7 +60,7 @@ export default function DashboardPage() {
       <div className="grid sm:grid-cols-3 gap-4">
         <StatCard label="Banners publicados" value={loading ? "-" : activeBanners} sub={`${banners.length} cadastrados`} icon={<ImageIcon className="w-5 h-5" />} />
         <StatCard label="DNS / URLs ativos" value={loading ? "-" : activeServers} sub={`${servers.length} configurações`} icon={<Globe className="w-5 h-5" />} accent />
-        <StatCard label="API" value="Online" sub="makrotv-ten.vercel.app" icon={<Tv className="w-5 h-5 text-green-400" />} />
+        <StatCard label="API" value="Online" sub="makrotv.vercel.app" icon={<Tv className="w-5 h-5 text-green-400" />} />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
