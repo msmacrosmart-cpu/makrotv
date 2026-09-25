@@ -56,7 +56,11 @@ echo "Destino: $PANEL_URL"
 echo "Entrada: $APK_IN"
 
 echo "[1/5] apktool decode"
-apktool d "$APK_IN" -o "$DECODED" -f
+if ! apktool d "$APK_IN" -o "$DECODED" -f; then
+  echo "Aviso: decode completo falhou; tentando -r (recursos originais preservados)"
+  rm -rf "$DECODED"
+  apktool d "$APK_IN" -r -o "$DECODED" -f
+fi
 
 echo "[2/5] patch smali/XML and remove testOnly"
 python3 - "$DECODED" "$OLD_URL" "$OLD_HOST" "$PANEL_URL" "$PANEL_ORIGIN" <<'PY'
@@ -95,7 +99,11 @@ if grep -R "appstop\.site" "$DECODED" --include='*.smali' --include='*.xml' -n; 
 fi
 
 echo "[3/5] apktool build"
-apktool b "$DECODED" -o "$UNSIGNED"
+if ! apktool b "$DECODED" -o "$UNSIGNED"; then
+  echo "Aviso: build padrão falhou; tentando com --use-aapt2"
+  rm -f "$UNSIGNED"
+  apktool b "$DECODED" --use-aapt2 -o "$UNSIGNED"
+fi
 
 # Align before signing. Signing an APK and then aligning it invalidates v2/v3.
 echo "[4/5] zipalign (before signing)"
