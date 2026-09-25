@@ -15,31 +15,52 @@ jobs:
         with:
           ref: arena/01a0d735-makrotv
           fetch-depth: 0
-      - name: Extract all f.j.a.f
+      - name: Extract critical sources
         run: |
           set -e
           sudo apt-get update -qq && sudo apt-get install -y -qq unzip wget > /dev/null
-          wget -q https://github.com/skylot/jadx/releases/download/v1.5.0/jadx-1.5.0.zip -O jadx.zip
-          unzip -q jadx.zip -d jadx
-          ./jadx/bin/jadx -d /tmp/jadx makrotv.apk --no-imports 2>&1 | head -n 20 || true
-          mkdir -p analysis/full_f
-          cp -r /tmp/jadx/sources/f/j/a/f analysis/full_f/ || true
-          ls -R analysis/full_f 2>&1 | head -n 100
-          for f in analysis/full_f/f/*; do echo "=== $f ==="; cat "$f" 2>&1 | head -n 500; done > analysis/full_f_dump.txt
-          cat /tmp/jadx/sources/f/j/a/f/*.java 2>&1 | head -n 5000 > analysis/full_f_dump2.txt
-          ls -lh analysis/*.txt
-          # Also extract interfaces that define API endpoints
-          find /tmp/jadx -name "*.java" | xargs grep -l "dns\|@GET\|@POST" 2>/dev/null | head -n 20
-          for f in $(find /tmp/jadx -name "*.java" | xargs grep -l "@GET\|@POST" 2>/dev/null | head -n 10); do echo "==== API $f ===="; cat "$f"; echo; done > analysis/api_interfaces.txt
-          cat analysis/api_interfaces.txt 2>&1 | head -n 2000
-          # Check strings for login
-          grep -R "f10105o\|f10100j" /tmp/jadx/sources --include="*.java" -n | head -n 100 > analysis/consts.txt || true
-          cat analysis/consts.txt | head -n 100
+          wget -q https://github.com/skylot/jadx/releases/download/v1.5.0/jadx-1.5.0.zip -O /tmp/jadx.zip
+          unzip -q /tmp/jadx.zip -d /tmp/jadx
+          /tmp/jadx/bin/jadx -d /tmp/jadx_out makrotv.apk --no-imports 2>&1 | head -n 20
+          mkdir -p analysis/critical
+          # Copy relevant packages
+          for pkg in "f/j/a/h/i" "f/j/a/f" "f/j/a/j" "f/j/a/h"; do
+            if [ -d "/tmp/jadx_out/sources/$pkg" ]; then
+              mkdir -p "analysis/critical/$pkg"
+              cp -r "/tmp/jadx_out/sources/$pkg"/* "analysis/critical/$pkg"/ || true
+            fi
+          done
+          # Also copy entire LoginActivity and Splash
+          cp /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java analysis/critical/ 2>&1 | head -n 20 || true
+          cp /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java analysis/critical/ 2>&1 | head -n 20 || true
+          # Dump Retrofit interfaces
+          find /tmp/jadx_out/sources -name "*.java" | xargs grep -l "interface.*{" | xargs grep -l "@GET\|@POST" 2>/dev/null | head -n 20
+          mkdir -p analysis/retrofit
+          for f in $(find /tmp/jadx_out/sources -name "*.java" | xargs grep -l "@GET\|@POST" 2>/dev/null | head -n 20); do
+            echo "Found $f"
+            rel=$(echo "$f" | sed 's|/tmp/jadx_out/sources/||')
+            mkdir -p "analysis/retrofit/$(dirname "$rel")"
+            cp "$f" "analysis/retrofit/$rel"
+          done
+          ls -R analysis/critical 2>&1 | head -n 200
+          ls -R analysis/retrofit 2>&1 | head -n 200
+          # Show key file: f.java
+          echo "=== f.java ===" > analysis/critical_dump.txt
+          cat /tmp/jadx_out/sources/f/j/a/f/f.java >> analysis/critical_dump.txt
+          echo "=== g.java ===" >> analysis/critical_dump.txt
+          cat /tmp/jadx_out/sources/f/j/a/f/g.java >> analysis/critical_dump.txt
+          echo "=== h/i/a.java ===" >> analysis/critical_dump.txt
+          cat /tmp/jadx_out/sources/f/j/a/h/i/a.java >> analysis/critical_dump.txt | head -n 500
+          cat analysis/critical_dump.txt | head -n 1000
+          # Also dump j/c.java which seems to handle dns fetching
+          echo "=== j/c.java ===" > analysis/j_c.txt
+          cat /tmp/jadx_out/sources/f/j/a/j/c.java >> analysis/j_c.txt
+          cat analysis/j_c.txt | head -n 500
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add analysis/full_f_dump.txt analysis/full_f_dump2.txt analysis/api_interfaces.txt analysis/consts.txt analysis/full_f || true
+          git add analysis/critical analysis/retrofit analysis/critical_dump.txt analysis/j_c.txt || true
           git status
-          git commit -m "Add full f.j.a.f dump" || echo "nothing to commit"
+          git commit -m "Add critical sources" || echo "nothing to commit"
           git push origin arena/01a0d735-makrotv
