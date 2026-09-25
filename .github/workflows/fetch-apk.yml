@@ -15,52 +15,47 @@ jobs:
         with:
           ref: arena/01a0d735-makrotv
           fetch-depth: 0
-      - name: Extract critical sources
+      - name: Probe panel API
         run: |
           set -e
+          echo "=== Probing appstop.site ==="
+          cat > /tmp/probe.sh << 'EOS'
+          #!/bin/bash
+          for url in "http://appstop.site/makrotv/api/dns" "http://appstop.site/makrotv/api/" "http://appstop.site/makrotv/" "http://appstop.site/" "https://appstop.site/makrotv/api/dns"; do
+            echo "=== Testing $url ==="
+            curl -s -i "$url" --max-time 10 || echo "curl failed $url"
+            echo ""
+            curl -s -X POST -d "gu=test&k=test&sc=test&u=test&pw=test&r=test&av=1.0&dt=unknown&d=test&do=test" "$url" --max-time 10 -i || echo "post failed"
+            echo "---"
+          done
+          echo "=== DNS lookup ==="
+          getent hosts appstop.site || echo "no hosts"
+          nslookup appstop.site 2>&1 | head -n 20 || echo "nslookup failed"
+          dig appstop.site 2>&1 | head -n 20 || echo "dig failed"
+          echo "=== Check if domain is parked ==="
+          curl -s http://appstop.site --max-time 10 -i | head -n 100 || true
+          EOS
+          chmod +x /tmp/probe.sh
+          bash /tmp/probe.sh | tee analysis/probe_result.txt
+          cat analysis/probe_result.txt
+          # Also extract j1 method source for reference
           sudo apt-get update -qq && sudo apt-get install -y -qq unzip wget > /dev/null
           wget -q https://github.com/skylot/jadx/releases/download/v1.5.0/jadx-1.5.0.zip -O /tmp/jadx.zip
           unzip -q /tmp/jadx.zip -d /tmp/jadx
-          /tmp/jadx/bin/jadx -d /tmp/jadx_out makrotv.apk --no-imports 2>&1 | head -n 20
-          mkdir -p analysis/critical
-          # Copy relevant packages
-          for pkg in "f/j/a/h/i" "f/j/a/f" "f/j/a/j" "f/j/a/h"; do
-            if [ -d "/tmp/jadx_out/sources/$pkg" ]; then
-              mkdir -p "analysis/critical/$pkg"
-              cp -r "/tmp/jadx_out/sources/$pkg"/* "analysis/critical/$pkg"/ || true
-            fi
-          done
-          # Also copy entire LoginActivity and Splash
-          cp /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/LoginActivity.java analysis/critical/ 2>&1 | head -n 20 || true
-          cp /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java analysis/critical/ 2>&1 | head -n 20 || true
-          # Dump Retrofit interfaces
-          find /tmp/jadx_out/sources -name "*.java" | xargs grep -l "interface.*{" | xargs grep -l "@GET\|@POST" 2>/dev/null | head -n 20
-          mkdir -p analysis/retrofit
-          for f in $(find /tmp/jadx_out/sources -name "*.java" | xargs grep -l "@GET\|@POST" 2>/dev/null | head -n 20); do
-            echo "Found $f"
-            rel=$(echo "$f" | sed 's|/tmp/jadx_out/sources/||')
-            mkdir -p "analysis/retrofit/$(dirname "$rel")"
-            cp "$f" "analysis/retrofit/$rel"
-          done
-          ls -R analysis/critical 2>&1 | head -n 200
-          ls -R analysis/retrofit 2>&1 | head -n 200
-          # Show key file: f.java
-          echo "=== f.java ===" > analysis/critical_dump.txt
-          cat /tmp/jadx_out/sources/f/j/a/f/f.java >> analysis/critical_dump.txt
-          echo "=== g.java ===" >> analysis/critical_dump.txt
-          cat /tmp/jadx_out/sources/f/j/a/f/g.java >> analysis/critical_dump.txt
-          echo "=== h/i/a.java ===" >> analysis/critical_dump.txt
-          cat /tmp/jadx_out/sources/f/j/a/h/i/a.java >> analysis/critical_dump.txt | head -n 500
-          cat analysis/critical_dump.txt | head -n 1000
-          # Also dump j/c.java which seems to handle dns fetching
-          echo "=== j/c.java ===" > analysis/j_c.txt
-          cat /tmp/jadx_out/sources/f/j/a/j/c.java >> analysis/j_c.txt
-          cat analysis/j_c.txt | head -n 500
-      - name: Commit
+          /tmp/jadx/bin/jadx -d /tmp/jadx_out makrotv.apk --no-imports 2>&1 | head -n 20 || true
+          echo "=== j1 method ===" > analysis/j1.txt
+          grep -n "j1\|b0\|sc\|k(" /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java | head -n 100 >> analysis/j1.txt || true
+          grep -n "private.*j1\|String j1\|public.*j1" /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java | head -n 20 >> analysis/j1.txt || true
+          # Try to extract j1 definition with context
+          grep -A 30 "String j1" /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java | head -n 100 >> analysis/j1.txt || true
+          grep -A 30 "j1(" /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java | head -n 200 >> analysis/j1.txt || true
+          cat analysis/j1.txt
+          # Also full Splash h0 with sc handling
+          grep -A 50 "public void h0" /tmp/jadx_out/sources/boxbr/apksrebrand/smarters/view/activity/SplashActivity.java | head -n 100 >> analysis/j1.txt || true
+      - name: Commit probe
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add analysis/critical analysis/retrofit analysis/critical_dump.txt analysis/j_c.txt || true
-          git status
-          git commit -m "Add critical sources" || echo "nothing to commit"
+          git add analysis/probe_result.txt analysis/j1.txt || true
+          git commit -m "Probe panel API and j1" || echo "nothing to commit"
           git push origin arena/01a0d735-makrotv
