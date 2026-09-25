@@ -18,9 +18,11 @@ dist/
 data/db.json.bak
 /tmp
 
-# apk generated
-apk-patched/
+# apk generated (keep patched apk for distribution, ignore temp)
+apk-patched/*.unsigned
+apk-patched/*.aligned
 *.keystore
+!public/makrotv-patched.apk
 
 # misc
 .DS_Store

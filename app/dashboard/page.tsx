@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Users, Server, ShieldCheck, AlertTriangle, Clock, Plus, Activity, ExternalLink } from "lucide-react";
+import { Users, Server, ShieldCheck, AlertTriangle, Clock, Plus, Activity, ExternalLink, Download, CheckCircle, Tv } from "lucide-react";
 
 type Stats = {
   total: number;
@@ -44,7 +44,7 @@ export default function DashboardPage() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-black tracking-tight">Visão Geral</h1>
-          <p className="text-white/50 mt-1">Gerencie clientes, DNS e a saúde da sua API em tempo real.</p>
+          <p className="text-white/50 mt-1">Gerencie clientes, DNS e a saúde da sua API em tempo real. • https://makrotv.vercel.app</p>
         </div>
         <div className="flex gap-2">
           <Link href="/dashboard/clients" className="px-4 py-2 rounded-full bg-white text-black text-sm font-semibold flex items-center gap-2 hover:bg-white/90">
@@ -52,6 +52,25 @@ export default function DashboardPage() {
           </Link>
           <Link href="/dashboard/servers" className="px-4 py-2 rounded-full bg-white/10 border border-white/10 text-sm font-semibold flex items-center gap-2 hover:bg-white/15">
             <Server className="w-4 h-4" /> Novo Servidor
+          </Link>
+        </div>
+      </div>
+
+      {/* APK Download banner - destaque */}
+      <div className="bg-gradient-to-br from-red-600 to-red-700 rounded-2xl p-6 text-white flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl shadow-red-900/20">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-white text-red-600 flex items-center justify-center font-black text-xl">M</div>
+          <div>
+            <div className="font-black flex items-center gap-2"><Download className="w-4 h-4" /> APK MakroTV — Pronto para instalar</div>
+            <div className="text-sm text-white/80">Já apontado para <span className="font-mono bg-white/20 px-1.5 rounded">https://makrotv.vercel.app</span> • 60 MB • v7</div>
+          </div>
+        </div>
+        <div className="flex gap-2 w-full md:w-auto">
+          <a href="/api/apk/download" className="flex-1 md:flex-none px-6 py-3 rounded-full bg-white text-red-700 font-black flex items-center justify-center gap-2 hover:bg-white/90 transition">
+            <Download className="w-4 h-4" /> Baixar APK
+          </a>
+          <Link href="/api/apk/info" target="_blank" className="px-4 py-3 rounded-full bg-white/15 border border-white/20 font-semibold flex items-center gap-2 hover:bg-white/20">
+            <ExternalLink className="w-4 h-4" /> Info
           </Link>
         </div>
       </div>
@@ -101,6 +120,27 @@ export default function DashboardPage() {
             <div className="mt-4 flex gap-2">
               <Link href="/api/dns" target="_blank" className="flex-1 py-2 rounded-xl bg-white text-red-700 text-sm font-bold text-center flex items-center justify-center gap-2">Testar API <ExternalLink className="w-4 h-4" /></Link>
             </div>
+            <div className="mt-3">
+              <a href="/api/apk/download" className="w-full py-2.5 rounded-xl bg-black/20 border border-white/20 text-sm font-bold text-center flex items-center justify-center gap-2 hover:bg-black/30">
+                <Download className="w-4 h-4" /> Baixar APK configurado <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          </div>
+
+          <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6">
+            <h3 className="font-bold flex items-center gap-2"><Tv className="w-4 h-4" /> APK Distribuição</h3>
+            <div className="text-sm text-white/60 mt-3 space-y-2">
+              <p>APK já patcheado para <span className="font-mono text-white bg-white/10 px-1 rounded text-xs">makrotv.vercel.app</span></p>
+              <div className="bg-[#262626] rounded-xl p-3 border border-white/5 font-mono text-xs space-y-1">
+                <div className="flex justify-between"><span className="text-white/50">Pacote</span><span>brstore.makro.app</span></div>
+                <div className="flex justify-between"><span className="text-white/50">Versão</span><span>v7 • 60 MB</span></div>
+                <div className="flex justify-between"><span className="text-white/50">Base URL</span><span className="text-green-400">makrotv.vercel.app</span></div>
+              </div>
+              <a href="/api/apk/download" className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold transition">
+                <Download className="w-4 h-4" /> Baixar APK
+              </a>
+              <p className="text-xs text-white/40 text-center">Instalação: Ative “Fontes desconhecidas” no Android</p>
+            </div>
           </div>
 
           <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6">
@@ -111,7 +151,7 @@ export default function DashboardPage() {
               <li>Usuário faz login com usuário/senha.</li>
               <li>App chama <code className="text-white">/player_api.php</code> que valida no painel.</li>
             </ol>
-            <div className="mt-4 text-xs text-white/40">Original: <span className="line-through">http://appstop.site/makrotv/api/dns</span> (suspenso) → Agora: seu domínio Vercel.</div>
+            <div className="mt-4 text-xs text-white/40">Original: <span className="line-through">http://appstop.site/makrotv/api/dns</span> (suspenso) → Agora: https://makrotv.vercel.app</div>
           </div>
         </div>
       </div>

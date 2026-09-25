@@ -1,0 +1,103 @@
+name: Patch APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      panel_url:
+        description: "URL base do painel (ex: https://makrotv.vercel.app)"
+        required: false
+        default: "https://makrotv.vercel.app"
+  push:
+    branches: ["arena/01a0d735-makrotv"]
+    paths:
+      - "scripts/patch-apk.sh"
+      - ".github/workflows/patch-apk.yml"
+      - "makrotv.apk"
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: arena/01a0d735-makrotv
+          fetch-depth: 0
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install apktool
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq apktool zipalign apksigner 2>&1 | tail -n 20 || sudo apt-get install -y -qq apktool
+          apktool --version || echo "apktool not found, trying manual install"
+          if ! command -v apktool >/dev/null 2>&1; then
+            wget -q https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O /usr/local/bin/apktool
+            wget -q https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.9.3.jar -O /usr/local/bin/apktool.jar
+            chmod +x /usr/local/bin/apktool
+            apktool --version
+          fi
+          java -version
+          which zipalign || echo "zipalign not found (ok, optional)"
+          which apksigner || echo "apksigner not found (will use jarsigner)"
+
+      - name: Patch APK
+        env:
+          PANEL_URL: ${{ github.event.inputs.panel_url || 'https://makrotv.vercel.app' }}
+        run: |
+          echo "Panel URL: $PANEL_URL"
+          chmod +x scripts/patch-apk.sh
+          ./scripts/patch-apk.sh "$PANEL_URL"
+          ls -lh apk-patched/ || true
+          echo "=== verifying patched URL in smali ==="
+          # verify no appstop remains in built apk (decode check)
+          if [ -f apk-patched/makrotv-patched.apk ]; then
+            echo "Patched APK exists: $(du -h apk-patched/makrotv-patched.apk | cut -f1)"
+            # quick strings check inside apk (unzip)
+            unzip -p apk-patched/makrotv-patched.apk classes.dex | strings | grep -F "makrotv.vercel.app" | head -n 5 || echo "checking via strings inside apk failed (maybe need dex extraction)"
+            # also check via apktool decode quick
+            mkdir -p /tmp/verify && apktool d apk-patched/makrotv-patched.apk -o /tmp/verify/app -f 2>&1 | tail -n 5
+            grep -r "makrotv.vercel.app" /tmp/verify/app --include="*.smali" | head -n 5 || echo "not found in smali verify"
+            grep -r "appstop.site" /tmp/verify/app --include="*.smali" | head -n 5 && echo "ERROR: appstop still present" || echo "OK: appstop removed"
+          else
+            echo "ERROR: patched apk not found"
+            exit 1
+          fi
+
+      - name: Prepare public APK for Vercel
+        run: |
+          mkdir -p public
+          cp -v apk-patched/makrotv-patched.apk public/makrotv-patched.apk
+          ls -lh public/makrotv-patched.apk
+          echo "=== also keep copy in apk-patched for releases ==="
+          ls -lh apk-patched/
+
+      - name: Commit patched APK
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f public/makrotv-patched.apk apk-patched/makrotv-patched.apk || git add public/makrotv-patched.apk apk-patched/makrotv-patched.apk || true
+          git status
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+          else
+            git commit -m "chore: patched APK for https://makrotv.vercel.app
+
+            - Base URL http://appstop.site/makrotv/api/ -> https://makrotv.vercel.app/makrotv/api/
+            - Generated via scripts/patch-apk.sh + apktool + apksigner
+            - Available at /api/apk/download and /makrotv-patched.apk"
+            git push origin arena/01a0d735-makrotv
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: makrotv-patched
+          path: apk-patched/makrotv-patched.apk
+          if-no-files-found: error

@@ -28,8 +28,11 @@ export async function GET() {
       health: "/api/health",
     },
     originalPanel: "http://appstop.site/makrotv/api/dns (suspenso - 302)",
-    newPanelBase: "https://seu-dominio.vercel.app",
+    newPanelBase: process.env.NEXT_PUBLIC_PANEL_URL || "https://makrotv.vercel.app",
+    panelUrl: process.env.NEXT_PUBLIC_PANEL_URL || "https://makrotv.vercel.app",
     apkPackage: "brstore.makro.app",
     baseUrlHardcoded: "http://appstop.site/makrotv/api/",
+    patchedApk: "/api/apk/info",
+    downloadUrl: "/makrotv-patched.apk",
   });
 }

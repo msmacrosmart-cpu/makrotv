@@ -16,6 +16,12 @@ const nextConfig = {
           { key: "Access-Control-Allow-Headers", value: "Content-Type, Authorization" },
         ],
       },
+      {
+        source: "/:path*.apk",
+        headers: [
+          { key: "Content-Type", value: "application/vnd.android.package-archive" },
+        ],
+      },
     ];
   },
 };
