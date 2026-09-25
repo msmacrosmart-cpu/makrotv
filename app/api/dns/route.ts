@@ -18,6 +18,16 @@ function sanitizeDns(value: string): string {
   return value.trim().replace(/\/+$/, "");
 }
 
+const jsonHeaders = {
+  "Content-Type": "application/json; charset=utf-8",
+  "Access-Control-Allow-Origin": "*",
+  "Cache-Control": "no-store",
+};
+
+function jsonResponse(payload: unknown, status = 200) {
+  return NextResponse.json(payload, { status, headers: jsonHeaders });
+}
+
 // Salt used in original app for sc calculation: "NB!@#12ZKWd" (from f.java h)
 const SALT = "NB!@#12ZKWd";
 const EMPTY_B = ""; // f.j.a.f.b.b
@@ -32,12 +42,12 @@ export async function POST(req: NextRequest) {
     if (body && Array.isArray(body.servers)) {
       const token = req.cookies.get("admin_token")?.value;
       if (!token || !verifyAdminToken(token)) {
-        return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+        return jsonResponse({ error: "Não autorizado" }, 401);
       }
       const db = getDB();
       db.servers = body.servers;
       saveDB(db);
-      return NextResponse.json({ servers: db.servers });
+      return jsonResponse({ servers: db.servers });
     }
   }
   return handle(req);
@@ -109,27 +119,26 @@ async function handle(req: NextRequest) {
   const hasDns = targetServers.length > 0;
 
   // Keep the legacy Xtream payload while exposing the sanitized URL explicitly.
+  const activeDns = targetServers[0] || "";
   const response = {
-    status: hasDns ? "true" : "false",
+    status: hasDns ? "active" : "error",
+    status_code: hasDns ? 200 : 503,
+    url: activeDns,
+    dns: activeDns,
+    message: hasDns ? "success" : "Nenhum servidor DNS ativo configurado.",
+    banners: [],
+    // Legacy Xtream fields retained for older APK wrappers.
     su,
     sc,
     ndd: "0",
     msg: hasDns ? "OK" : "Nenhum servidor DNS ativo configurado.",
-    url: targetServers[0] || "",
-    dns: su,
     servers: targetServers,
-    timestamp: new Date().toISOString(),
   };
 
   // Log for debugging (optional)
   // console.log("DNS request", params, "->", response);
 
-  return NextResponse.json(response, {
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store",
-    },
-  });
+  return jsonResponse(response);
 }
 
 // Handle OPTIONS for CORS
@@ -137,7 +146,7 @@ export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      "Access-Control-Allow-Origin": "*",
+      ...jsonHeaders,
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
     },
